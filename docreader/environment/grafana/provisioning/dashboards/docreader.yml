@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'Docreader Dashboards'
+    orgId: 1
+    type: file
+    disableDeletion: false
+    editable: true
+    allowUiUpdates: true
+    updateIntervalSeconds: 60
+    options:
+      path: /etc/grafana/provisioning/dashboards

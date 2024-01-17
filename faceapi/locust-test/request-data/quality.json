@@ -1,0 +1,27 @@
+{
+    "image": "",
+    "processParam": {
+        "scenario": "QualityFull",
+        "outputImageParams": {
+            "backgroundColor": [
+                255,
+                255,
+                255
+            ],
+            "crop": {
+                "type": 0,
+                "size": [
+                    300,
+                    400
+                ],
+                "padColor": [
+                    255,
+                    255,
+                    255
+                ],
+                "returnOriginalRect": true
+            }
+        },
+        "onlyCentralFace": true
+    }
+}

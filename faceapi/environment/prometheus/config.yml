@@ -1,0 +1,30 @@
+global:
+  scrape_interval: 10s
+
+  external_labels:
+    monitor: "face-api"
+
+rule_files:
+
+scrape_configs:
+  - job_name: "face-api-monitoring"
+    static_configs:
+      - targets: ["faceapi-cpu:41101", "faceapi-gpu:41101"]
+
+  - job_name: 'node'
+    static_configs:
+      - targets: [ 'node-exporter:9100' ]
+
+  - job_name: cadvisor
+    scrape_interval: 5s
+    static_configs:
+    - targets: [ 'cadvisor:8080' ]
+
+  - job_name: nvidia-dcgm
+    scrape_interval: 5s
+    static_configs:
+    - targets: [ 'dcgm-exporter:9400' ]
+
+  - job_name: "locust-monitoring"
+    static_configs:
+      - targets: [ "127.0.0.1:9646" ]
