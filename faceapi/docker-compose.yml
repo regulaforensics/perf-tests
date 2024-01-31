@@ -1,0 +1,171 @@
+version: "3.7"
+
+services:
+  faceapi:
+    container_name: face-api
+    image: regulaforensics/face-api:${IMAGE_TAG}
+    environment:
+      FACEAPI_CONFIG_PATH: "/app/config.yaml"
+    volumes:
+      - ${REGULA_LICENSE_PATH}:/app/extBin/unix_x64/cpu/regula.license
+      - ${CONFIG_FILE_PATH}:/app/config.yaml
+    networks:
+      - face-api-network
+    depends_on:
+      - "milvus"
+      - "db-postgres"
+      - "s3-storage"
+    entrypoint: "bash -c 'sleep 30 && ./entrypoint.sh'"
+    healthcheck:
+       test: curl -f http://127.0.0.1:41101/api/ping
+       interval: 60s
+       start_period: 60s
+       timeout: 30s
+       retries: 5
+    ports:
+      - "41101:41101"
+
+  ##### Storage
+  s3-storage:
+    image: quay.io/minio/minio:RELEASE.2023-10-25T06-33-25Z
+    command: server --console-address ":9001" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    volumes:
+      - minio-data:/data
+    networks:
+      - face-api-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  db-postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "regula_db"
+      POSTGRES_USER: "regula"
+      POSTGRES_PASSWORD: "Regulapasswd#1"
+    networks:
+      - face-api-network
+    ports:
+      - "5432:5432"
+
+  milvus:
+    container_name: milvus
+    image: milvusdb/milvus:v2.3.4
+    command: [ "milvus", "run", "standalone" ]
+    environment:
+      ETCD_ENDPOINTS: etcd:2379
+      MINIO_ADDRESS: s3-storage:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET_NAME: milvus-bucket
+    volumes:
+      - milvus-data:/var/lib/milvus
+    ports:
+      - "19530:19530"
+    networks:
+      - face-api-network
+    depends_on:
+      - "etcd"
+      - "s3-storage"
+
+  #### Monitoring
+  attu:
+    container_name: milvus-attu
+    image: zilliz/attu:latest
+    environment:
+      MILVUS_URL: milvus:19530
+    depends_on:
+      - "milvus"
+    networks:
+      - face-api-network
+    ports:
+      - "3000:3000"
+
+  etcd:
+    container_name: milvus-etcd
+    image: quay.io/coreos/etcd:v3.5.0
+    environment:
+      - ETCD_AUTO_COMPACTION_MODE=revision
+      - ETCD_AUTO_COMPACTION_RETENTION=1000
+      - ETCD_QUOTA_BACKEND_BYTES=4294967296
+    command: etcd -advertise-client-urls=http://127.0.0.1:2379 -listen-client-urls http://0.0.0.0:2379 --data-dir /etcd
+    networks:
+      - face-api-network
+
+  prometheus:
+    container_name: prometheus
+    image: ubuntu/prometheus
+    volumes:
+      - ./environment/prometheus/config.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - face-api-network
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    networks:
+      - face-api-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    expose:
+      - 8080
+    networks:
+      - face-api-network
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./environment/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - 9091:3000
+    depends_on:
+      - prometheus
+    networks:
+      - face-api-network
+
+networks:
+  face-api-network:
+    driver: bridge
+
+
+volumes:
+  minio-data:
+  postgres-data:
+  milvus-data:
+  grafana-data:
+    driver: local
+  prometheus-data:
+    driver: local
