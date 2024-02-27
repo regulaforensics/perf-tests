@@ -1,0 +1,125 @@
+version: "3.7"
+
+services:
+  docreader:
+    image: regulaforensics/docreader:latest
+    container_name: docreader
+    environment:
+      DOCREADER_CONFIG_PATH: "/app/config.yaml"
+    volumes:
+      - ${REGULA_LICENSE_PATH}:/app/extBin/unix_x64/regula.license
+      - ${CONFIG_FILE_PATH}:/app/config.yaml
+    networks:
+      - docreader-network
+    depends_on:
+      - "db-postgres"
+      - "s3-storage"
+    entrypoint: "bash -c 'sleep 30 && ./entrypoint.sh'"
+    healthcheck:
+      test: curl -f http://127.0.0.1:8080/api/ping
+      interval: 60s
+      start_period: 60s
+      timeout: 30s
+      retries: 5
+    ports:
+      - "8080:8080"
+
+  ##### Storage
+  s3-storage:
+    image: quay.io/minio/minio:RELEASE.2023-10-25T06-33-25Z
+    command: server --console-address ":9001" /data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    volumes:
+      - minio-data:/data
+    networks:
+      - docreader-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  db-postgres:
+    image: postgres:latest
+    container_name: postgres-db
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: "regula_docreader_db"
+      POSTGRES_USER: "regula"
+      POSTGRES_PASSWORD: "Regulapasswd#1"
+    networks:
+      - docreader-network
+    ports:
+      - "5432:5432"
+
+  prometheus:
+    container_name: prometheus
+    image: ubuntu/prometheus
+    volumes:
+      - ./environment/prometheus/config.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    networks:
+      - docreader-network
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    networks:
+      - docreader-network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    expose:
+      - 8080
+    networks:
+      - docreader-network
+
+  grafana:
+    image: grafana/grafana:latest
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./environment/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - 9091:3000
+    depends_on:
+      - prometheus
+    networks:
+      - docreader-network
+
+networks:
+  docreader-network:
+    driver: bridge
+
+
+volumes:
+  minio-data:
+  postgres-data:
+  grafana-data:
+    driver: local
+  prometheus-data:
+    driver: local
