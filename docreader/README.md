@@ -8,7 +8,7 @@ Env file: [./environment/.env](./environment/.env)
 
 | Environment variable | Value                        | Info                               |
 |----------------------|------------------------------|------------------------------------|
-| IMAGE_TAG            | nightly-cpu                  | Docker image tag you want to start |
+| IMAGE_TAG            | nightly                      | Docker image tag you want to start |
 | REGULA_LICENSE_PATH  | ./environment/regula.license | Regula license file location       |
 | CONFIG_FILE_PATH     | ./environment/config.yaml    | Docreader config file location     |
 
