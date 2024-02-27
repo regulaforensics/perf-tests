@@ -41,7 +41,6 @@ docker compose --env-file ./environment/.env down -v
 | Postgres    | 5432         | User: regula <br> Password: Regulapasswd#1 <br> DB Name: regula_db |
 | Minio       | 9000<br>9001 | User: minioadmin <br> Password: minioadmin                         |
 | Grafana     | 9091         | User: admin <br> Password: admin                                   |
-| Milvus attu | 3000         |                                                                    |
 
 
 
