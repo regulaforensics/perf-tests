@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  locust:
+    image: locustio/locust
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./locust-test/:/mnt/locust
+    command: -f /mnt/locust/locustfile.py ${SCENARIO} -H ${FACEAPI_URL} -u ${NUMBER_LOCUST_USERS} --autostart
+
+  locust-metrics-exporter:
+    image: containersol/locust_exporter
+    ports:
+      - "9646:9646"
+    environment:
+      - LOCUST_EXPORTER_URI=http://locust:8089
+    depends_on:
+      - locust

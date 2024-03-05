@@ -13,9 +13,6 @@ service:
     demoApp:
       enabled: true
 
-    searchDemoMode:
-      enabled: false
-
     cors:
       origins: "*"
       headers: "Content-Type"
@@ -55,7 +52,7 @@ service:
       connectionString: "postgresql://regula:Regulapasswd#1@db-postgres:5432/regula_db"
 
   detectMatch:
-    enabled: false
+    enabled: true
     results:
       location:
         bucket: "faceapi-detect-match"
@@ -63,7 +60,7 @@ service:
         folder: "faceapi-detect-match"
 
   liveness:
-    enabled: false
+    enabled: true
     ecdhSchema: "default"
     hideMetadata: false
     protectPersonalInfo: false

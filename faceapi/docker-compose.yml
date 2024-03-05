@@ -7,7 +7,7 @@ services:
     environment:
       FACEAPI_CONFIG_PATH: "/app/config.yaml"
     volumes:
-      - ${REGULA_LICENSE_PATH}:/app/extBin/unix_x64/cpu/regula.license
+      - ${REGULA_LICENSE_PATH}:/app/extBin/unix/regula.license
       - ${CONFIG_FILE_PATH}:/app/config.yaml
     networks:
       - face-api-network
