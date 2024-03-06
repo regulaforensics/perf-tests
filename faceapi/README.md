@@ -51,6 +51,18 @@ docker compose --env-file ./environment/.env down -v
 
 ## Tests
 It is better to run tests on different computers with face service
+
+### Local network test
+
+Before starting the test, you need to determine the network bandwidth
+
+```bash
+cd speed-test
+docker build -t speed-test .
+docker run --rm -e FACEAPI_HOST={FACEAPI_HOST}  speed-test 
+```
+FACEAPI_HOST - URL where the face service is raised
+
 ### Start configuration
 
 Env file: [./environment/.env](./environment/.env)
