@@ -36,6 +36,372 @@
         "x": 0,
         "y": 0
       },
+      "id": 68,
+      "panels": [],
+      "title": "GPU Nvidia",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "decmbytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 1
+      },
+      "id": 69,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "uid": "$datasource"
+          },
+          "editorMode": "code",
+          "expr": "DCGM_FI_DEV_FB_USED",
+          "interval": "",
+          "legendFormat": "GPU {{gpu}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "GPU Framebuffer Mem Used",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 83
+              },
+              {
+                "color": "red",
+                "value": 87
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 11,
+        "y": 1
+      },
+      "id": 71,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+          },
+          "editorMode": "code",
+          "expr": "avg(DCGM_FI_DEV_GPU_TEMP{})",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "GPU Avg. Temp",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 11,
+        "x": 0,
+        "y": 8
+      },
+      "id": 70,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull",
+            "max"
+          ],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+          },
+          "editorMode": "code",
+          "expr": "DCGM_FI_DEV_GPU_UTIL",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "GPU Utilization",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "#EAB839",
+                "value": 83
+              },
+              {
+                "color": "red",
+                "value": 87
+              }
+            ]
+          },
+          "unit": "celsius"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 6,
+        "x": 11,
+        "y": 8
+      },
+      "id": 72,
+      "options": {
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto"
+      },
+      "pluginVersion": "10.4.0",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "b3a95192-0c55-4e25-8bb4-815fff10d074"
+          },
+          "editorMode": "code",
+          "expr": "sum(DCGM_FI_DEV_POWER_USAGE{})",
+          "instant": false,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "GPU Power total",
+      "type": "gauge"
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 15
+      },
       "id": 63,
       "panels": [],
       "title": "Resource",
@@ -97,8 +463,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -106,7 +471,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 1
+        "y": 16
       },
       "id": 60,
       "options": {
@@ -194,8 +559,7 @@
               }
             ]
           },
-          "unit": "percentunit",
-          "unitScale": true
+          "unit": "percentunit"
         },
         "overrides": []
       },
@@ -203,7 +567,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 1
+        "y": 16
       },
       "id": 62,
       "options": {
@@ -291,8 +655,7 @@
               }
             ]
           },
-          "unit": "bytes",
-          "unitScale": true
+          "unit": "bytes"
         },
         "overrides": []
       },
@@ -300,7 +663,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 9
+        "y": 24
       },
       "id": 58,
       "options": {
@@ -388,8 +751,7 @@
               }
             ]
           },
-          "unit": "decbytes",
-          "unitScale": true
+          "unit": "decbytes"
         },
         "overrides": [
           {
@@ -422,7 +784,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 9
+        "y": 24
       },
       "id": 61,
       "options": {
@@ -460,7 +822,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 17
+        "y": 32
       },
       "id": 2,
       "panels": [],
@@ -522,8 +884,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -531,7 +892,7 @@
         "h": 7,
         "w": 6,
         "x": 0,
-        "y": 18
+        "y": 33
       },
       "id": 4,
       "options": {
@@ -617,8 +978,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": [
           {
@@ -642,7 +1002,7 @@
         "h": 7,
         "w": 6,
         "x": 6,
-        "y": 18
+        "y": 33
       },
       "id": 6,
       "options": {
@@ -704,7 +1064,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 25
+        "y": 40
       },
       "id": 8,
       "panels": [],
@@ -766,8 +1126,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -775,7 +1134,7 @@
         "h": 8,
         "w": 4,
         "x": 0,
-        "y": 26
+        "y": 41
       },
       "id": 50,
       "options": {
@@ -909,8 +1268,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -918,7 +1276,7 @@
         "h": 8,
         "w": 4,
         "x": 4,
-        "y": 26
+        "y": 41
       },
       "id": 55,
       "options": {
@@ -1007,8 +1365,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1016,7 +1373,7 @@
         "h": 8,
         "w": 4,
         "x": 8,
-        "y": 26
+        "y": 41
       },
       "id": 51,
       "options": {
@@ -1105,8 +1462,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1114,7 +1470,7 @@
         "h": 8,
         "w": 4,
         "x": 12,
-        "y": 26
+        "y": 41
       },
       "id": 53,
       "options": {
@@ -1203,8 +1559,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1212,7 +1567,7 @@
         "h": 8,
         "w": 4,
         "x": 16,
-        "y": 26
+        "y": 41
       },
       "id": 54,
       "options": {
@@ -1379,8 +1734,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1388,7 +1742,7 @@
         "h": 8,
         "w": 4,
         "x": 0,
-        "y": 34
+        "y": 49
       },
       "id": 47,
       "options": {
@@ -1522,8 +1876,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1531,7 +1884,7 @@
         "h": 8,
         "w": 4,
         "x": 4,
-        "y": 34
+        "y": 49
       },
       "id": 56,
       "options": {
@@ -1620,8 +1973,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1629,7 +1981,7 @@
         "h": 8,
         "w": 4,
         "x": 8,
-        "y": 34
+        "y": 49
       },
       "id": 43,
       "options": {
@@ -1718,8 +2070,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1727,7 +2078,7 @@
         "h": 8,
         "w": 4,
         "x": 12,
-        "y": 34
+        "y": 49
       },
       "id": 44,
       "options": {
@@ -1816,8 +2167,7 @@
                 "value": 80
               }
             ]
-          },
-          "unitScale": true
+          }
         },
         "overrides": []
       },
@@ -1825,7 +2175,7 @@
         "h": 8,
         "w": 4,
         "x": 16,
-        "y": 34
+        "y": 49
       },
       "id": 48,
       "options": {
@@ -1984,8 +2334,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2001,7 +2350,7 @@
         "h": 8,
         "w": 4,
         "x": 0,
-        "y": 42
+        "y": 57
       },
       "id": 52,
       "options": {
@@ -2082,8 +2431,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2099,7 +2447,7 @@
         "h": 8,
         "w": 4,
         "x": 4,
-        "y": 42
+        "y": 57
       },
       "id": 49,
       "options": {
@@ -2276,8 +2624,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2293,7 +2640,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 42
+        "y": 57
       },
       "id": 18,
       "options": {
@@ -2371,8 +2718,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2388,7 +2734,7 @@
         "h": 6,
         "w": 4,
         "x": 12,
-        "y": 42
+        "y": 57
       },
       "id": 16,
       "options": {
@@ -2466,8 +2812,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2483,7 +2828,7 @@
         "h": 7,
         "w": 4,
         "x": 0,
-        "y": 50
+        "y": 65
       },
       "id": 46,
       "options": {
@@ -2564,8 +2909,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2581,7 +2925,7 @@
         "h": 7,
         "w": 4,
         "x": 4,
-        "y": 50
+        "y": 65
       },
       "id": 10,
       "options": {
@@ -2717,7 +3061,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 57
+        "y": 72
       },
       "id": 12,
       "panels": [],
@@ -2771,8 +3115,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2788,7 +3131,7 @@
         "h": 6,
         "w": 8,
         "x": 0,
-        "y": 58
+        "y": 73
       },
       "id": 21,
       "options": {
@@ -2866,8 +3209,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2883,7 +3225,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 58
+        "y": 73
       },
       "id": 25,
       "options": {
@@ -2961,8 +3303,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -2978,7 +3319,7 @@
         "h": 6,
         "w": 4,
         "x": 12,
-        "y": 58
+        "y": 73
       },
       "id": 28,
       "options": {
@@ -3056,8 +3397,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3073,7 +3413,7 @@
         "h": 6,
         "w": 4,
         "x": 0,
-        "y": 64
+        "y": 79
       },
       "id": 26,
       "options": {
@@ -3151,8 +3491,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3168,7 +3507,7 @@
         "h": 6,
         "w": 4,
         "x": 4,
-        "y": 64
+        "y": 79
       },
       "id": 22,
       "options": {
@@ -3246,8 +3585,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3263,7 +3601,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 64
+        "y": 79
       },
       "id": 24,
       "options": {
@@ -3341,8 +3679,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3358,7 +3695,7 @@
         "h": 6,
         "w": 4,
         "x": 12,
-        "y": 64
+        "y": 79
       },
       "id": 29,
       "options": {
@@ -3436,8 +3773,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3453,7 +3789,7 @@
         "h": 6,
         "w": 4,
         "x": 0,
-        "y": 70
+        "y": 85
       },
       "id": 14,
       "options": {
@@ -3531,8 +3867,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3548,7 +3883,7 @@
         "h": 6,
         "w": 4,
         "x": 4,
-        "y": 70
+        "y": 85
       },
       "id": 19,
       "options": {
@@ -3626,8 +3961,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3643,7 +3977,7 @@
         "h": 6,
         "w": 4,
         "x": 8,
-        "y": 70
+        "y": 85
       },
       "id": 27,
       "options": {
@@ -3721,8 +4055,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3738,7 +4071,7 @@
         "h": 6,
         "w": 4,
         "x": 12,
-        "y": 70
+        "y": 85
       },
       "id": 23,
       "options": {
@@ -3775,7 +4108,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 76
+        "y": 91
       },
       "id": 64,
       "panels": [],
@@ -3829,8 +4162,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3871,7 +4203,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 77
+        "y": 92
       },
       "id": 34,
       "options": {
@@ -3961,8 +4293,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -3978,7 +4309,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 77
+        "y": 92
       },
       "id": 67,
       "options": {
@@ -4056,8 +4387,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4073,7 +4403,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 77
+        "y": 92
       },
       "id": 39,
       "options": {
@@ -4110,7 +4440,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 85
+        "y": 100
       },
       "id": 36,
       "panels": [],
@@ -4164,8 +4494,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4206,7 +4535,7 @@
         "h": 8,
         "w": 8,
         "x": 0,
-        "y": 86
+        "y": 101
       },
       "id": 65,
       "options": {
@@ -4296,8 +4625,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4313,7 +4641,7 @@
         "h": 8,
         "w": 8,
         "x": 8,
-        "y": 86
+        "y": 101
       },
       "id": 66,
       "options": {
@@ -4391,8 +4719,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4408,7 +4735,7 @@
         "h": 8,
         "w": 8,
         "x": 16,
-        "y": 86
+        "y": 101
       },
       "id": 37,
       "options": {
@@ -4445,7 +4772,7 @@
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 94
+        "y": 109
       },
       "id": 32,
       "panels": [],
@@ -4499,8 +4826,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4516,7 +4842,7 @@
         "h": 7,
         "w": 8,
         "x": 0,
-        "y": 95
+        "y": 110
       },
       "id": 30,
       "options": {
@@ -4594,8 +4920,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4611,7 +4936,7 @@
         "h": 7,
         "w": 8,
         "x": 8,
-        "y": 95
+        "y": 110
       },
       "id": 33,
       "options": {
@@ -4701,8 +5026,7 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green",
-                "value": null
+                "color": "green"
               },
               {
                 "color": "red",
@@ -4718,7 +5042,7 @@
         "h": 7,
         "w": 8,
         "x": 16,
-        "y": 95
+        "y": 110
       },
       "id": 38,
       "options": {
@@ -4796,6 +5120,6 @@
   "timezone": "",
   "title": "Face API Prometheus Dashboard (Grouped)",
   "uid": "CHTzwMbVk",
-  "version": 6,
+  "version": 3,
   "weekStart": ""
 }
