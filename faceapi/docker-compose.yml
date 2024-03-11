@@ -1,9 +1,11 @@
 version: "3.7"
 
 services:
-  faceapi:
+  faceapi-cpu:
     container_name: face-api
     image: regulaforensics/face-api:${IMAGE_TAG}
+    profiles:
+      - cpu
     environment:
       FACEAPI_CONFIG_PATH: "/app/config.yaml"
     volumes:
@@ -24,6 +26,66 @@ services:
        retries: 5
     ports:
       - "41101:41101"
+
+  faceapi-gpu:
+    container_name: face-api
+    image: regulaforensics/face-api:${IMAGE_TAG}
+    profiles:
+      - gpu
+    deploy:
+     resources:
+       reservations:
+         devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    environment:
+      FACEAPI_CONFIG_PATH: "/app/config.yaml"
+    volumes:
+      - ${REGULA_LICENSE_PATH}:/app/extBin/unix/regula.license
+      - ${CONFIG_FILE_PATH}:/app/config.yaml
+    networks:
+      - face-api-network
+    depends_on:
+      - "milvus"
+      - "db-postgres"
+      - "s3-storage"
+    entrypoint: "bash -c 'sleep 30 && ./entrypoint.sh'"
+    healthcheck:
+       test: curl -f http://127.0.0.1:41101/api/ping
+       interval: 60s
+       start_period: 60s
+       timeout: 30s
+       retries: 5
+    ports:
+      - "41101:41101"
+
+  ##### Nvidia GPU Exporter
+  dcgm-exporter:
+    container_name: dcgm-exporter
+    image: nvcr.io/nvidia/k8s/dcgm-exporter:3.3.5-3.4.0-ubuntu22.04
+    profiles:
+      - gpu
+    environment:
+      NVIDIA_VISIBLE_DEVICES: all
+      NVIDIA_DRIVER_CAPABILITIES: all
+    deploy:
+     resources:
+       reservations:
+         devices:
+          - driver: nvidia
+            count: 1
+            capabilities: [gpu]
+    ports:
+      - "9400:9400"
+    cap_add:
+    - SYS_ADMIN
+    networks:
+      - face-api-network
+    devices:
+      - /dev/nvidiactl:/dev/nvidiactl
+      - /dev/nvidia-uvm:/dev/nvidia-uvm
+      - /dev/nvidia0:/dev/nvidia0
 
   ##### Storage
   s3-storage:

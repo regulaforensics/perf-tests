@@ -23,18 +23,18 @@ Before starting, need to set the URL where the locus tests will be launched [pro
 ### Run services
 
 ```bash
-docker compose --env-file ./environment/.env up -d
+docker compose --profile cpu|gpu --env-file ./environment/.env up -d
 ```
 
 ### Stop services
 
 ```bash
-docker compose --env-file ./environment/.env down
+docker compose --env-file ./environment/.env down --remove-orphans
 ```
 
 ### Stop services and delete volumes
 ```bash
-docker compose --env-file ./environment/.env down -v
+docker compose --env-file ./environment/.env down -v --remove-orphans
 ```
 
 ### Services
@@ -59,7 +59,7 @@ Before starting the test, you need to determine the network bandwidth
 ```bash
 cd speed-test
 docker build -t speed-test .
-docker run --rm -e FACEAPI_HOST={FACEAPI_HOST}  speed-test 
+docker run --rm -e FACEAPI_HOST={FACEAPI_HOST}  speed-test
 ```
 FACEAPI_HOST - URL where the face service is raised
 
@@ -73,7 +73,7 @@ Env file: [./environment/.env](./environment/.env)
 | NUMBER_LOCUST_USERS  | 1                      | Peak number of concurrent Locust users. |
 | SCENARIO             | UserLiveness           | Performance test run script             |
 
-All [locust settings](https://docs.locust.io/en/stable/configuration.html) 
+All [locust settings](https://docs.locust.io/en/stable/configuration.html)
 
 ### Run services
 
@@ -92,4 +92,4 @@ docker compose -f locust-docker-compose.yml --env-file ./environment/.env down
 docker compose -f locust-docker-compose.yml --env-file ./environment/.env down -v
 ```
 
-All statistics on the service and locust tests will be in Grafana 
+All statistics on the service and locust tests will be in Grafana
