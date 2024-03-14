@@ -2,7 +2,7 @@
 # These values can be overwritten with env variables
 
 FACEAPI_HOST="${FACEAPI_HOST:-http://127.0.0.1:41101}"
-SIZE_PACKAGE="${SIZE_PACKAGE:-10}"
+SIZE_PACKAGE="${SIZE_PACKAGE:-3}"
 
 run_speedtest()
 {
