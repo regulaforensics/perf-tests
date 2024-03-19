@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   faceapi-cpu:
-    container_name: face-api
+    container_name: face-api-cpu
     image: regulaforensics/face-api:${IMAGE_TAG}
     profiles:
       - cpu
@@ -28,7 +28,7 @@ services:
       - "41101:41101"
 
   faceapi-gpu:
-    container_name: face-api
+    container_name: face-api-gpu
     image: regulaforensics/face-api:${IMAGE_TAG}
     profiles:
       - gpu
