@@ -45,4 +45,35 @@ docker compose --env-file ./environment/.env down -v
 
 
 ## Tests
-TBD
+It is better to run tests on different computers with face service
+
+### Start configuration
+
+Env file: [./environment/.env](./environment/.env)
+
+| Environment variable | Value                 | Info                                     |
+|----------------------|-----------------------|------------------------------------------|
+| DOCREADERAPI_URL     | http://127.0.0.1:8080 | URL where docreader service is installed |
+| NUMBER_LOCUST_USERS  | 1                     | Peak number of concurrent Locust users.  |
+| SCENARIO             | UserApiV2             | Performance test run script              |
+
+All [locust settings](https://docs.locust.io/en/stable/configuration.html)
+
+### Run services
+
+```bash
+docker compose -f locust-docker-compose.yml --env-file ./environment/.env up -d
+```
+
+### Stop services
+
+```bash
+docker compose -f locust-docker-compose.yml --env-file ./environment/.env down
+```
+
+### Stop services and delete volumes
+```bash
+docker compose -f locust-docker-compose.yml --env-file ./environment/.env down -v
+```
+
+All statistics on the service and locust tests will be in Grafana
