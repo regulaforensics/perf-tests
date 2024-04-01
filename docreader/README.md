@@ -45,7 +45,7 @@ docker compose --env-file ./environment/.env down -v
 
 
 ## Tests
-It is better to run tests on different computers with face service
+It is better to run tests on different computers with docreader service
 
 ### Start configuration
 
