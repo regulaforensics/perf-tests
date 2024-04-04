@@ -2,12 +2,12 @@ version: "3.7"
 
 services:
   docreader:
-    image: regulaforensics/docreader:latest
+    image: regulaforensics/docreader:${IMAGE_TAG}
     container_name: docreader
     environment:
       DOCREADER_CONFIG_PATH: "/app/config.yaml"
     volumes:
-      - ${REGULA_LICENSE_PATH}:/app/extBin/unix_x64/regula.license
+      - ${REGULA_LICENSE_PATH}:/app/extBin/unix/regula.license
       - ${CONFIG_FILE_PATH}:/app/config.yaml
     networks:
       - docreader-network
