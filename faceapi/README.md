@@ -94,4 +94,4 @@ docker compose -f locust-docker-compose.yml --env-file ./environment/.env down
 docker compose -f locust-docker-compose.yml --env-file ./environment/.env down -v
 ```
 
-All statistics on the service and locust tests will be in Grafana
+All statistics on the service and locust tests will be in Grafana.
