@@ -1,5 +1,7 @@
 # Face API
 
+For details, refer to the [Performance Guide](https://docs.regulaforensics.com/develop/face-sdk/web-service/administration/performance-guide/).
+
 ## Environment
 
 ### Start configuration
@@ -18,7 +20,7 @@ Face api service starts with settings specified in [config file ./environment/co
 
 ### Prometheus configuration
 
-Before starting, need to set the URL where the locus tests will be launched [prometheus config file ./environment/prometheus/config.yml](./environment/prometheus/config.yml)
+Before starting, you need to set the URL where the locus tests will be launched [prometheus config file ./environment/prometheus/config.yml](./environment/prometheus/config.yml)
 
 ### Run services
 
@@ -50,18 +52,18 @@ docker compose --env-file ./environment/.env down -v --remove-orphans
 
 
 ## Tests
-It is better to run tests on different computers with face service
+It is better to run tests on different computers with face service.
 
 ### Local network test
 
-Before starting the test, you need to determine the network bandwidth
+Before starting the test, you need to determine the network bandwidth.
 
 ```bash
 cd speed-test
 docker build -t speed-test .
 docker run --rm -e FACEAPI_HOST={FACEAPI_HOST}  speed-test
 ```
-FACEAPI_HOST - URL where the face service is raised
+FACEAPI_HOST is the URL where the face service is raised.
 
 ### Start configuration
 
@@ -73,7 +75,7 @@ Env file: [./environment/.env](./environment/.env)
 | NUMBER_LOCUST_USERS  | 1                      | Peak number of concurrent Locust users. |
 | SCENARIO             | UserLiveness           | Performance test run script             |
 
-All [locust settings](https://docs.locust.io/en/stable/configuration.html)
+[All locust settings](https://docs.locust.io/en/stable/configuration.html)
 
 ### Run services
 
@@ -92,4 +94,4 @@ docker compose -f locust-docker-compose.yml --env-file ./environment/.env down
 docker compose -f locust-docker-compose.yml --env-file ./environment/.env down -v
 ```
 
-All statistics on the service and locust tests will be in Grafana
+All statistics on the service and locust tests will be in Grafana.
