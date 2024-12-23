@@ -59,7 +59,7 @@ class UserMatch(HttpUser):
 
         headers = {'Content-Type': 'application/json'}
 
-        self.client.post("/api/matching", data=contents_match, headers=headers)
+        self.client.post("/api/match", data=contents_match, headers=headers)
 
 
 class UserLiveness(HttpUser):
