@@ -5,6 +5,8 @@ services:
     image: locustio/locust
     ports:
       - "8089:8089"
+    networks:
+      - face-api-network
     volumes:
       - ./locust-test/:/mnt/locust
     command: -f /mnt/locust/locustfile.py ${SCENARIO} -H ${FACEAPI_URL} -u ${NUMBER_LOCUST_USERS} --autostart
@@ -13,7 +15,13 @@ services:
     image: containersol/locust_exporter
     ports:
       - "9646:9646"
+    networks:
+      - face-api-network
     environment:
       - LOCUST_EXPORTER_URI=http://locust:8089
     depends_on:
       - locust
+
+networks:
+  face-api-network:
+    driver: bridge

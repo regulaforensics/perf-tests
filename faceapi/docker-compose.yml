@@ -89,6 +89,7 @@ services:
 
   ##### Storage
   s3-storage:
+    container_name: s3-storage
     image: quay.io/minio/minio:RELEASE.2023-10-25T06-33-25Z
     command: server --console-address ":9001" /data
     ports:
@@ -108,7 +109,7 @@ services:
       retries: 3
 
   db-postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: postgres-db
     restart: always
     volumes:
@@ -207,6 +208,7 @@ services:
       - face-api-network
 
   grafana:
+    container_name: grafana
     image: grafana/grafana:latest
     volumes:
       - grafana-data:/var/lib/grafana
