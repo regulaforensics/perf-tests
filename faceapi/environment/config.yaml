@@ -61,6 +61,7 @@ service:
 
   liveness:
     enabled: true
+    mode: development
     ecdhSchema: "default"
     hideMetadata: false
     protectPersonalInfo: false
