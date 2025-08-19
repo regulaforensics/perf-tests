@@ -52,6 +52,7 @@ service:
 
   sessionApi:
     enabled: true
+    mode: development
     saveRequest: true
     transactions:
       location:
