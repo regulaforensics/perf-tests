@@ -70,7 +70,7 @@ class UserLiveness(HttpUser):
 
         headers = {'Content-Type': 'application/json'}
 
-        with self.client.post("/api/v2/liveness/start", data=contents_start_liveness, headers=headers) as response:
+        with self.client.post("/api/v2/liveness/start", data=contents_start_liveness, headers=headers, catch_response=True) as response:
             res_json = json.loads(response.text)
             transaction_id = res_json["transactionId"]
             self.client.post(f"/api/v2/liveness?transactionId={transaction_id}",

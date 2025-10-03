@@ -33,7 +33,7 @@ class UserApiV2(HttpUser):
 
         headers = {'Content-Type': 'application/json'}
 
-        with self.client.post("/api/v2/transaction/start", json={"privateKey": private_key, 'metadata': {}}, headers=headers) as response:
+        with self.client.post("/api/v2/transaction/start", json={"privateKey": private_key, 'metadata': {}}, headers=headers, catch_response=True) as response:
             res_json = json.loads(response.text)
             transaction_id = res_json["transactionId"]
             self.client.post(f"/api/v2/transaction/{transaction_id}", headers={'x-client-key': public_key},
