@@ -1,0 +1,53 @@
+sdk:
+  systemInfo:
+    returnSystemInfo: false
+service:
+  database:
+    connectionString: mongodb://mongo:27017/doc
+  processing:
+    enabled: true
+    results:
+      audit: false
+      location:
+        bucket: docreader-processing
+        container: docreader-processing
+        folder: output
+#      saveResult: true
+  sessionApi:
+    enabled: true
+    transactions:
+      location:
+        bucket: docreader-transactions
+        container: docreader-transactions
+        folder: docreader-transactions
+  storage:
+    type: fs
+  webServer:
+    cors:
+      headers: Content-Type,X-Client-Key
+      methods: POST,PUT,GET,DELETE,PATCH,HEAD
+      origins: '*'
+    demoApp:
+      enabled: true
+      webComponent:
+        enabled: false
+    logging:
+      access:
+        console: true
+        format: '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
+        path: logs/access/docreader-access.log
+      app:
+        console: true
+        path: logs/app/docreader-app.log
+      formatter: text
+      level: INFO
+    metrics:
+      enabled: true
+      path: metrics
+    port: 8080
+    ssl:
+      cert: certs/tls.crt
+      enabled: false
+      key: certs/tls.key
+      tlsVersion: 1.2
+    timeout: 30
