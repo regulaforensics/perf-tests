@@ -9,6 +9,8 @@ services:
       - idv-network
     volumes:
       - ./locust-test/:/mnt/locust
+    env_file:
+      - ./locust-environment/.env
     command: >
       -f /mnt/locust/locustfile.py
       ${SCENARIO}
@@ -44,7 +46,3 @@ networks:
   idv-network:
     external: true
     name: idv_idv-network
-
-
-
-

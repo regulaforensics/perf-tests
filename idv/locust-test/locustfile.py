@@ -168,3 +168,62 @@ class IDVViewGetByIdPerf(HttpUser):
                     session_response.failure(f"Failed to parse session payload: {error}")
 
 
+class IDVCreateSessionOnboarding(HttpUser):
+    """Create session by workflow and trigger ONBOARDING step."""
+
+    wait_time = between(1, 2)
+
+    def on_start(self):
+        self.headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+        self.workflow_id = os.getenv("WORKFLOW_ID", "8246cfb8-873a-11f0-9e3c-c37f9fc9dd9a")
+        self.locale = os.getenv("SESSION_LOCALE", "en")
+
+    @task(1)
+    def create_session_and_post_onboarding(self):
+        with self.client.post(
+            f"/api/sessions?workflowId={self.workflow_id}",
+            json={"locale": self.locale},
+            headers=self.headers,
+            auth=(USER_ID, PASSWORD),
+            catch_response=True,
+            name="/api/sessions [POST]",
+        ) as create_resp:
+            if create_resp.status_code != 200:
+                create_resp.failure(f"Session create failed: {create_resp.status_code}")
+                return
+
+            try:
+                payload = create_resp.json()
+                session_id = payload.get("id") or payload.get("sessionId")
+            except (json.JSONDecodeError, KeyError) as error:
+                create_resp.failure(f"Failed to parse session create response: {error}")
+                return
+
+            if not session_id:
+                create_resp.failure("Create response has no id/sessionId")
+                return
+
+            create_resp.success()
+
+        with self.client.post(
+            f"/api/sessions/{session_id}/step/ONBOARDING?type=data",
+            json={"continue": True},
+            headers=self.headers,
+            auth=(USER_ID, PASSWORD),
+            catch_response=True,
+            name="/api/sessions/{session_id}/step/ONBOARDING [POST]",
+        ) as step_resp:
+            if step_resp.status_code != 200:
+                step_resp.failure(f"ONBOARDING step failed: {step_resp.status_code}")
+                return
+
+            try:
+                _ = step_resp.json()
+            except json.JSONDecodeError as error:
+                step_resp.failure(f"Failed to parse onboarding response: {error}")
+                return
+
+            step_resp.success()
