@@ -1,0 +1,1692 @@
+id: edda0192-b890-11ef-a348-17da751a6a22
+name: General KYC
+version: latest
+description: General KYC demo flow
+lifetime: 1000
+
+defaultLocale: en-us
+locales:
+    - code: en-us
+      value: English
+    - code: ru-ru
+      value: Russian
+    - code: es-cl
+      value: Spanish
+    - code: pt-br
+      value: Portuguese
+    - code: ar-bh
+      value: Arabic
+client:
+  layout:
+    info_screen:
+      backgroundColor: '#F5F5F7'
+    info_details_view:
+      backgroundColor: '#FFFFFF'
+      cornerRadius: 16
+    info_H1:
+      fontName: SF Pro Display
+      fontSize: 28
+      fontColor: '#202020'
+      alignment: LEFT
+    info_H2:
+      fontName: SF Pro Display
+      fontSize: 17
+      fontColor: '#202020'
+    info_H3:
+      fontName: SF Pro Display
+      fontSize: 15
+      fontColor: '#202020'
+    info_description:
+      fontName: SF Pro Display
+      fontSize: 20
+      fontColor: '#202020'
+    info_main_button_title:
+      fontName: SF Pro
+      fontSize: 17
+      fontColor: '#FFFFFF'
+      alignment: CENTER
+    info_secondary_button_title:
+      fontName: SF Pro
+      fontSize: 17
+      fontColor: '#7E57C5'
+      alignment: CENTER
+    status_title:
+      fontName: SF Pro Display
+      fontSize: 24
+      fontColor: '#202020'
+      alignment: CENTER
+    progress_title:
+      fontName: SF Pro
+      fontSize: 16
+      fontColor: '#202020'
+      alignment: CENTER
+    info_details_image:
+      contentMode: FILL
+      cornerRadius: 16
+    info_image:
+      contentMode: ASPECT_FILL
+      cornerRadius: 9
+    status_image:
+      contentMode: FILL
+    info_signature:
+      signature:
+        imageId: signature
+        contentMode: ASPECT_FILL
+    info_main_button:
+      backgroundColor: '#7E57C5'
+      highlightColor: '#7E57C580'
+      cornerRadius: 16
+    info_secondary_button:
+      backgroundColor: '#F5F5F7'
+      highlightColor: '#F5F5F780'
+      cornerRadius: 16
+      borderWidth: 1
+      borderColor: '#7E57C5'
+    progress_indicator:
+      indicatorColor: '#7E57C5'
+    info_common_header:
+      closeButton:
+        image:
+          imageId: close_icon
+        responseBody:
+          continue: false
+    info_common_skip_header:
+      closeButton:
+        image:
+          imageId: close_icon
+        responseBody:
+          continue: false
+          skip: false
+    info_common_footer:
+      signature:
+        imageId: signature
+  steps:
+    - templateId: PROGRESS
+      templateLayout:
+        progressView:
+          title:
+            text: Processing
+            layout:
+              - progress_title
+          layout:
+            - progress_indicator
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+  android:
+    dbPath:
+      type: assets
+      path: Regula/db.dat
+      databseId: Full
+    licensePath:
+      type: assets
+      path: Regula/regula.license
+  ios:
+    dbPath:
+      type: mainBundle
+      path: db.dat
+      databseId: Full
+    licensePath:
+      type: mainBundle
+      path: regula.license
+steps:
+  - id: ONBOARDING
+    name: ONBOARDING
+    fileId: is_continue_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: INFO_DETAILS
+      templateLayout:
+        header:
+          layout:
+            - info_common_header
+        title:
+          text: "{{ locale.GENERAL_KYC_VERIFY_IDENTITY }}"
+          layout:
+            - info_H1
+          alignment: CENTER
+        details:
+          items:
+            - title:
+                text: "{{ locale.GENERAL_KYC_SCAN_ID }}"
+                layout:
+                  - info_H2
+              description:
+                text: "{{ locale.GENERAL_KYC_SCAN_ID_DESC }}"
+                layout:
+                  - info_H3
+              image:
+                imageURL: '{{ config.baseUrl }}/api/v1/assets/onboardingScanDoc/content'
+                layout:
+                  - info_details_image
+            - title:
+                text: "{{ locale.GENERAL_KYC_READ_RFID }}"
+                layout:
+                  - info_H2
+              description:
+                text: "{{ locale.GENERAL_KYC_READ_RFID_DESC }}"
+                layout:
+                  - info_H3
+              image:
+                imageURL: '{{ config.baseUrl }}/api/v1/assets/onboardingRfid/content'
+                layout:
+                  - info_details_image
+            - title:
+                text: "{{ locale.GENERAL_KYC_TAKE_SELFIE }}"
+                layout:
+                  - info_H2
+              description:
+                text: "{{ locale.GENERAL_KYC_TAKE_SELFIE_DESC }}"
+                layout:
+                  - info_H3
+              image:
+                imageURL: '{{ config.baseUrl }}/api/v1/assets/onboardingLiveness/content'
+                layout:
+                  - info_details_image
+          layout:
+            - info_details_view
+        buttons:
+          - title:
+              text: "{{ locale.GENERAL_KYC_START_VERIFICATION }}"
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_TRANSFORMER
+    conditions:
+      - name: Prepare OK
+        transit:
+          step: PREPARE_DOCUMENT
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Prepare NOT OK
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+  - id: PREPARE_DOCUMENT
+    name: PREPARE_DOCUMENT
+    fileId: is_continue_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: INFO
+      templateLayout:
+        header:
+          layout:
+            - info_common_header
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/prepareScanDoc/content'
+          layout:
+            - info_image
+        title:
+          text: "{{ locale.GENERAL_KYC_SCAN_ID }}"
+          layout:
+            - info_H1
+        description:
+          text: "{{ locale.GENERAL_KYC_SCAN_ID_DESC }}"
+          layout:
+            - info_description
+        buttons:
+          - title:
+              text: "{{ locale.GENERAL_KYC_CONTINUE }}"
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_TRANSFORMER
+    conditions:
+      - name: Prepare passport OK
+        transit:
+          step: DOC_READER
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Prepare passport NOT OK
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+    attempts:
+      count: 3
+      transit:
+        step: KYC_FAILED
+        status: NOT_VERIFIED
+  - id: DOC_READER
+    name: DOC_READER
+    fileId: doc_reader
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: DOC_READER
+      locale: '{{ session.locale }}'
+      processParam:
+        multipageProcessing: true
+        scenario: FullProcess
+        internalScenario: MrzAndLocate
+        backendProcessing:
+          serviceURL: '{{ config.baseUrl }}/{{ config.services.docreader.prefix }}'
+          rfidServerSideChipVerification: false
+      functionality:
+        recordScanningProcess: true
+        showSkipNextPageButton: false
+        showCaptureButton: false
+        showCaptureButtonDelayFromDetect: 0
+        showCaptureButtonDelayFromStart: 0
+        orientation:
+            android: 1
+            ios: 2
+        rfidTimeout: 60
+    transformers:
+      - id: DOC_READER_TRANSFORMER
+      - id: CANCEL_TRANSFORMER
+    conditions:
+      - name: Doc cancel
+        transit:
+          step: PREPARE_DOCUMENT
+        rules:
+          - id: cancel_rule
+            decision: true
+      - name: Doc has no type
+        transit:
+          step: ERROR_DOC
+        rules:
+          - id: doc_has_type
+            decision: false
+      - name: Valid doc with rfid
+        transit:
+          step: PREPARE_RFID
+        rules:
+          - id: rfid_flow
+            decision: true
+      - name: Valid doc without rfid
+        transit:
+          step: PREPARE_LIVENESS
+        rules:
+          - id: rfid_flow
+            decision: false
+    actions:
+      - id: DOCREADER_SCENARIO
+      - id: GET_DOCREADER_RESULTS
+        async: true
+      - id: GET_DOC_VIDEO
+        async: true
+    normalizers:
+      - id: document
+    attempts:
+      count: 3
+      transit:
+        step: KYC_FAILED
+        status: NOT_VERIFIED
+  - id: PREPARE_RFID
+    name: PREPARE_RFID
+    fileId: is_continue_or_skip_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: INFO
+      templateLayout:
+        header:
+          layout:
+            - info_common_skip_header
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/prepareRFID/content'
+          layout:
+            - info_image
+        title:
+          text: "{{ locale.GENERAL_KYC_READ_RFID }}"
+          layout:
+            - info_H1
+        description:
+          text: "{{ locale.GENERAL_KYC_READ_RFID_DESC }}"
+          layout:
+            - info_description
+        buttons:
+          - title:
+              text: "{{ locale.GENERAL_KYC_CONTINUE }}"
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+              skip: false
+            layout:
+              - info_main_button
+          - title:
+              text: "{{ locale.GENERAL_KYC_SKIP }}"
+              layout:
+                - info_secondary_button_title
+            responseBody:
+              continue: false
+              skip: true
+            layout:
+              - info_secondary_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_OR_SKIP_TRANSFORMER
+    conditions:
+      - name: Prepare rfid
+        transit:
+          step: SCAN_RFID
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Skip step
+        transit:
+          step: PREPARE_LIVENESS
+        rules:
+          - id: skip_rule
+            decision: true
+      - name: Prepare rfid not ok
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+    attempts:
+      count: 3
+      transit:
+        step: PREPARE_LIVENESS
+  - id: SCAN_RFID
+    name: SCAN_RFID
+    fileId: scan_rfid
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: SCAN_RFID
+      locale: '{{ session.locale }}'
+      processParam:
+        scenario: FullProcess
+        backendProcessing:
+          serviceURL: '{{ config.baseUrl }}/{{ config.services.docreader.prefix }}'
+          rfidServerSideChipVerification: false
+    transformers:
+      - id: SCAN_RFID_TRANSFORMER
+      - id: CANCEL_TRANSFORMER
+    conditions:
+      - name: Rfid cancel
+        transit:
+          step: PREPARE_RFID
+        rules:
+          - id: cancel_rule
+            decision: true
+      - name: Valid rfid
+        transit:
+          step: PREPARE_LIVENESS
+        rules:
+          - id: valid_rfid
+            decision: true
+      - name: Invalid rfid transaction
+        transit:
+          step: ERROR_RFID
+        operator: any
+        rules:
+          - id: invalid_rfid_transaction
+            decision: true
+      - name: Not valid rfid
+        transit:
+          step: ERROR_RFID
+        operator: any
+        rules:
+          - id: valid_rfid
+            decision: false
+    actions:
+      - id: DOCREADER_SCENARIO
+      - id: GET_DOCREADER_RESULTS
+    normalizers:
+      - id: document
+    attempts:
+      count: 3
+      transit:
+        step: PREPARE_LIVENESS
+  - id: PREPARE_LIVENESS
+    name: PREPARE_LIVENESS
+    fileId: is_continue_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: INFO
+      templateLayout:
+        header:
+          layout:
+            - info_common_header
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/prepareLiveness/content'
+          layout:
+            - info_image
+        title:
+          text: '{{ locale.GENERAL_KYC_TAKE_SELFIE }}'
+          layout:
+            - info_H1
+        description:
+          text: '{{ locale.GENERAL_KYC_TAKE_SELFIE_DESC }}'
+          layout:
+            - info_description
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_CONTINUE }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_TRANSFORMER
+    conditions:
+      - name: Liveness is ok
+        transit:
+          step: LIVENESS
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Liveness not ok
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+    attempts:
+      transit:
+        step: KYC_FAILED
+        status: NOT_VERIFIED
+      count: 3
+
+  - id: LIVENESS
+    name: LIVENESS
+    fileId: liveness
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: LIVENESS
+      serviceURL: '{{ config.baseUrl }}/{{ config.services.faceapi.prefix }}'
+      locale: '{{ session.locale }}'
+      config:
+        skipSteps:
+          - SUCCESS_STEP
+        attemptsCount: 3
+        recordingProcess: SYNCHRONOUS_UPLOAD
+    transformers:
+      - id: LIVENESS_TRANSFORMER
+      - id: CANCEL_TRANSFORMER
+    actions:
+      - id: LIVENESS_STATUS
+      - id: MATCH_DOC_AND_LIVENESS
+      - id: GET_LIVENESS_PORTRAIT
+      - id: GET_LIVENESS_VIDEO
+    conditions:
+      - name: Liveness cancel
+        transit:
+          step: PREPARE_LIVENESS
+        operator: all
+        rules:
+          - id: cancel_rule
+            decision: true
+      - name: Continue
+        transit:
+          step: PERFORM_DATA_EXTRACTION
+        operator: all
+        rules:
+          - id: cancel_rule
+            decision: false
+  - id: PERFORM_DATA_EXTRACTION
+    name: PERFORM_DATA_EXTRACTION
+    cancelLifetimeTimer: false
+    type: PROCESSING
+    conditions:
+      - name: Next
+        transit:
+          step: PERFORM_MATCH
+        rules:
+          - id: constant_true_rule
+            decision: true
+    actions:
+      - id: LIVENESS_STATUS
+        async: true
+      - id: GET_LIVENESS_VIDEO
+        async: true
+      - id: GET_LIVENESS_PORTRAIT
+        async: true
+  - id: PERFORM_MATCH
+    name: PERFORM_MATCH
+    cancelLifetimeTimer: false
+    type: PROCESSING
+    conditions:
+      - name: Next
+        transit:
+          step: PERFORM_CHECKS
+        rules:
+          - id: constant_true_rule
+            decision: true
+    actions:
+      - id: MATCH_DOC_AND_LIVENESS
+  - id: PERFORM_CHECKS
+    name: PERFORM_CHECKS
+    cancelLifetimeTimer: false
+    type: PROCESSING
+    conditions:
+      - name: All Good
+        transit:
+          step: KYC_COMPLETED
+          status: VERIFIED
+        operator: all
+        rules:
+          - id: valid_document
+            decision: true
+          - id: valid_document_type
+            decision: true
+          - id: valid_age
+            decision: true
+          - id: compliant_liveness_status
+            decision: true
+          - id: valid_similarity
+            decision: true
+      - name: Not Good
+        transit:
+          step: KYC_COMPLETED
+          status: NOT_VERIFIED
+        operator: any
+        rules:
+          - id: valid_document
+            decision: false
+          - id: valid_document_type
+            decision: false
+          - id: valid_age
+            decision: false
+          - id: compliant_liveness_status
+            decision: false
+          - id: valid_similarity
+            decision: false
+    normalizers:
+      - id: liveness
+      - id: face_match
+      - id: document
+  - id: ABORT
+    name: ABORT
+    cancelLifetimeTimer: false
+    final: true
+    type: DATA
+    client:
+      templateId: STATUS
+      templateLayout:
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/workflowErrorLarge/content'
+          layout:
+            - status_image
+        title:
+          text: '{{ locale.GENERAL_KYC_VERIFICATION_CANCELLED }}'
+          layout:
+            - status_title
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_CLOSE }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+  - id: ERROR
+    name: ERROR
+    cancelLifetimeTimer: false
+    final: true
+    type: DATA
+  - id: KYC_COMPLETED
+    name: KYC_COMPLETED
+    cancelLifetimeTimer: false
+    final: true
+    type: DATA
+    client:
+      templateId: STATUS
+      templateLayout:
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/workflowVerifiedLarge/content'
+          layout:
+            - status_image
+        title:
+          text: '{{ locale.GENERAL_KYC_DATA_SUBMITTED }}'
+          layout:
+            - status_title
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_CLOSE }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+  - id: KYC_FAILED
+    name: KYC_FAILED
+    cancelLifetimeTimer: false
+    final: true
+    type: DATA
+    client:
+      templateId: STATUS
+      templateLayout:
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/workflowErrorLarge/content'
+          layout:
+            - status_image
+        title:
+          text: '{{ locale.GENERAL_KYC_VERIFICATION_FAILED }}'
+          layout:
+            - status_title
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_CLOSE }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+  - id: ERROR_DOC
+    name: ERROR_DOC
+    fileId: is_continue_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: STATUS
+      templateLayout:
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/workflowErrorLarge/content'
+          layout:
+            - status_image
+        title:
+          text: '{{ locale.GENERAL_KYC_ERROR_READING_ID }}'
+          layout:
+            - status_title
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_TRY_AGAIN }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+            layout:
+              - info_main_button
+          - title:
+              text: '{{ locale.GENERAL_KYC_CLOSE_VERIFICATION }}'
+              layout:
+                - info_secondary_button_title
+            responseBody:
+              continue: false
+            layout:
+              - info_secondary_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_TRANSFORMER
+    conditions:
+      - name: Continue
+        transit:
+          step: PREPARE_DOCUMENT
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Abort
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+    normalizers:
+      - id: document
+    attempts:
+      count: 2
+      transit:
+        step: KYC_FAILED
+        status: NOT_VERIFIED
+  - id: ERROR_RFID
+    name: ERROR_RFID
+    fileId: is_continue_or_skip_file
+    cancelLifetimeTimer: false
+    type: DATA
+    client:
+      templateId: STATUS
+      templateLayout:
+        image:
+          imageURL: '{{ config.baseUrl }}/api/v1/assets/workflowErrorLarge/content'
+          layout:
+            - status_image
+        title:
+          text: '{{ locale.GENERAL_KYC_ERROR_READING_RFID }}'
+          layout:
+            - status_title
+        buttons:
+          - title:
+              text: '{{ locale.GENERAL_KYC_TRY_AGAIN }}'
+              layout:
+                - info_main_button_title
+            responseBody:
+              continue: true
+              skip: false
+            layout:
+              - info_main_button
+          - title:
+              text: '{{ locale.GENERAL_KYC_CLOSE_VERIFICATION }}'
+              layout:
+                - info_secondary_button_title
+            responseBody:
+              continue: false
+              skip: false
+            layout:
+              - info_secondary_button
+          - title:
+              text: '{{ locale.GENERAL_KYC_SKIP_RFID_VERIFICATION }}'
+              layout:
+                - info_secondary_button_title
+            responseBody:
+              continue: false
+              skip: true
+            layout:
+              - info_secondary_button
+        footer:
+          layout:
+            - info_common_footer
+        layout:
+          - info_screen
+    transformers:
+      - id: CONTINUE_OR_SKIP_TRANSFORMER
+    conditions:
+      - name: Continue
+        transit:
+          step: PREPARE_RFID
+        rules:
+          - id: continue_rule
+            decision: true
+      - name: Skip step
+        transit:
+          step: PREPARE_LIVENESS
+        rules:
+          - id: skip_rule
+            decision: true
+      - name: Abort
+        transit:
+          step: ABORT
+          status: NOT_COMPLETED
+        rules:
+          - id: continue_rule
+            decision: false
+    attempts:
+      count: 2
+      transit:
+        step: PREPARE_LIVENESS
+        status: NOT_VERIFIED
+rules:
+  - id: invalid_rfid_transaction
+    name: Is empty rfid transaction
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: SCAN_RFID_TRANSACTION_ID
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: SCAN_RFID_TRANSACTION_ID
+              op: $eq
+              value: ''
+  - id: constant_true_rule
+    name: Constant True
+    condition:
+      type: script
+      script: 1 == 1
+  - id: continue_rule
+    name: Continue
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CONTINUE
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CONTINUE
+              op: $eq
+              value: 'true'
+  - id: skip_rule
+    name: Skip
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: SKIP
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: SKIP
+              op: $eq
+              value: 'true'
+  - id: cancel_rule
+    name: Cancel
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CANCEL
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CANCEL
+              op: $eq
+              value: 'true'
+  - id: valid_document
+    name: Valid Document
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: TRANSACTION_ID
+              op: $exists
+            - property: FULL_AUTH_OVERALL_STATUS
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: FULL_AUTH_OVERALL_STATUS
+              op: $eq
+              value: 1
+  - id: valid_document_type
+    name: Allowed document type
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: DOCTYPE
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: DOCTYPE
+              op: $in
+              value:
+                - 11
+                - 12
+                - 215
+  - id: doc_has_type
+    name: Has document type
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: GET_DOCREADER_RESULTS_completed
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: DOCTYPE
+              op: $exists
+  - id: valid_age
+    name: Age verification
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: AGE
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: AGE
+              op: $gte
+              value: 18
+  - id: compliant_liveness_status
+    name: Liveness check
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: LIVENESS_STATUS
+              op: $eq
+              value: 0
+  - id: valid_similarity
+    name: Document vs Selfie match
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: LIVENESS_DOC_SIMILARITY
+              op: $gte
+              value: 0.8
+  - id: rfid_flow
+    name: Go to RFID Flow
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CHIP_PAGE
+              op: $exists
+            - property: HAS_NFC
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: CHIP_PAGE
+              op: $ne
+              value: 0
+            - property: HAS_NFC
+              op: $eq
+              value: 'true'
+  - id: valid_rfid
+    name: Validated RFID
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: RFID_STATUS
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: RFID_STATUS
+              op: $eq
+              value: 1
+  - id: valid_mrz_status
+    name: MRZ validity
+    precondition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: MRZ_STATUS
+              op: $exists
+    condition:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: MRZ_STATUS
+              op: $eq
+              value: 1
+events:
+  onError:
+    transit:
+      step: ERROR
+      status: not_verified
+  onTimeout:
+    transit:
+      step: ABORT
+      status: not_completed
+properties:
+  - id: FULL_NAME
+    type: str
+  - id: FIRST_NAME
+    type: str
+  - id: SURNAME
+    type: str
+  - id: DOCUMENT_NUMBER
+    type: str
+  - id: LIVENESS_STATUS
+    type: int
+  - id: LIVENESS_PORTRAIT
+    type: binary
+  - id: LIVENESS_VIDEO
+    type: binary
+  - id: DOC_VIDEO
+    type: binary
+  - id: TRANSACTION_ID
+    type: str
+  - id: LIVENESS_TRANSACTION_ID
+    type: str
+  - id: SCAN_RFID_TRANSACTION_ID
+    type: str
+  - id: HAS_NFC
+    type: bool
+  - id: LIVENESS_DOC_SIMILARITY
+    type: decimal
+  - id: AGE
+    type: int
+  - id: RFID_STATUS
+    type: int
+  - id: CHIP_PAGE
+    type: int
+  - id: RFID_PHOTO
+    type: binary
+  - id: DOC_PHOTO
+    type: binary
+  - id: DOCUMENT_CLASS_CODE
+    type: str
+  - id: FULL_AUTH_OVERALL_STATUS
+    type: int
+  - id: DOCTYPE
+    type: int
+  - id: MRZ_STATUS
+    type: int
+  - id: ONECANDIDATE
+    type: str
+  - id: CONTINUE
+    type: bool
+  - id: SKIP
+    type: bool
+  - id: CANCEL
+    type: bool
+  - id: NATIONALITY
+    type: str
+  - id: DATE_OF_BIRTH
+    type: str
+transformers:
+  - id: GET_DOC_READER_RESULTS
+    name: GET_DOC_READER_RESULTS
+    type: easyjson
+    extracts:
+      - id: DOCTYPE
+        rule:
+          key: dType
+          path: ContainerList.List.OneCandidate.FDSIDList
+      - id: CHIP_PAGE
+        rule:
+          key: ChipPage
+      - id: AGE
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 185
+              lcid: 0
+      - id: FULL_AUTH_OVERALL_STATUS
+        rule:
+          key: overallStatus
+          path: ContainerList.List.Status
+      - id: RFID_STATUS
+        rule:
+          key: Status
+          path: ContainerList.List.TDocBinaryInfo.RFID_BINARY_DATA.RFID_Session_Data
+      - id: MRZ_STATUS
+        rule:
+          key: mrz
+          path: ContainerList.List.Status.detailsOptical
+      - id: FULL_NAME
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 25
+              lcid: 0
+      - id: FIRST_NAME
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 9
+              lcid: 0
+      - id: SURNAME
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 8
+              lcid: 0
+      - id: DOCUMENT_NUMBER
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 2
+              lcid: 0
+      - id: DOC_PHOTO
+        rule:
+          key: value
+          path: ContainerList.List.Images.fieldList.valueList
+          filters:
+            fieldList:
+              fieldType: 201
+            valueList:
+              containerType: 6
+      - id: DOC_PHOTO
+        rule:
+          key: value
+          path: ContainerList.List.Images.fieldList.valueList
+          filters:
+            fieldList:
+              fieldType: 201
+            valueList:
+              containerType: 103
+      - id: NATIONALITY
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 11
+              lcid: 0
+      - id: DATE_OF_BIRTH
+        rule:
+          key: value
+          path: ContainerList.List.Text.fieldList
+          filters:
+            fieldList:
+              fieldType: 5
+              lcid: 0
+  - id: MATCH_DOC_AND_LIVENESS_TRANSFORMER
+    name: MATCH_DOC_AND_LIVENESS_TRANSFORMER
+    type: json
+    extracts:
+      - id: LIVENESS_DOC_SIMILARITY
+        rule: $..results.[0].similarity
+  - id: LIVENESS_STATUS_TRANSFORMER
+    name: LIVENESS_STATUS_TRANSFORMER
+    type: json
+    extracts:
+      - id: LIVENESS_STATUS
+        rule: $..status
+  - id: LIVENESS_PORTRAIT_TRANSFORMER
+    name: LIVENESS_PORTRAIT_TRANSFORMER
+    type: binary
+    extracts:
+      - id: LIVENESS_PORTRAIT
+  - id: LIVENESS_VIDEO_TRANSFORMER
+    name: LIVENESS_VIDEO_TRANSFORMER
+    type: binary
+    extracts:
+      - id: LIVENESS_VIDEO
+  - id: DOC_VIDEO_TRANSFORMER
+    name: DOC_VIDEO_TRANSFORMER
+    type: binary
+    extracts:
+      - id: DOC_VIDEO
+  - id: LIVENESS_TRANSFORMER
+    name: LIVENESS_TRANSFORMER
+    type: json
+    extracts:
+      - id: LIVENESS_TRANSACTION_ID
+        rule: $..transactionId
+  - id: DOC_READER_TRANSFORMER
+    name: DOC_READER_TRANSFORMER
+    type: json
+    extracts:
+      - id: TRANSACTION_ID
+        rule: $..transactionId
+      - id: HAS_NFC
+        rule: $..has_nfc
+  - id: SCAN_RFID_TRANSFORMER
+    name: SCAN_RFID_TRANSFORMER
+    type: json
+    extracts:
+      - id: SCAN_RFID_TRANSACTION_ID
+        rule: $..transactionId
+  - id: CANCEL_TRANSFORMER
+    name: CANCEL_TRANSFORMER
+    type: json
+    extracts:
+      - id: CANCEL
+        rule: $..cancel
+  - id: CONTINUE_TRANSFORMER
+    name: CONTINUE_TRANSFORMER
+    type: json
+    extracts:
+      - id: CONTINUE
+        rule: $..continue
+  - id: CONTINUE_OR_SKIP_TRANSFORMER
+    name: CONTINUE_OR_SKIP_TRANSFORMER
+    type: json
+    extracts:
+      - id: CONTINUE
+        rule: $..continue
+      - id: SKIP
+        rule: $..skip
+actions:
+  - id: MATCH_DOC_AND_LIVENESS
+    name: MATCH_DOC_AND_LIVENESS
+    type: http
+    fileId: match_doc_and_liveness
+    transformers:
+      - id: MATCH_DOC_AND_LIVENESS_TRANSFORMER
+    options:
+      url: '{{ config.services.faceapi.url }}/api/match?logRequest=false'
+      method: post
+      headers: null
+      successCodes:
+        - 200
+      body: |
+        {
+          "images": [
+            {
+              "index": 0,
+              "data": "{{ DOC_PHOTO | loadFromStorage | b64encode }}",
+              "type": 1
+            },
+            {
+              "index": 1,
+              "data": "{{ LIVENESS_PORTRAIT | loadFromStorage | b64encode }}",
+              "type": 3
+            }
+          ]
+        }
+      response: {}
+      timeout: 25
+    when:
+      type: statement
+      op: $and
+      groups:
+        - op: $and
+          conditions:
+            - property: LIVENESS_PORTRAIT
+              op: $exists
+  - id: DOCREADER_SCENARIO
+    name: DOCREADER_SCENARIO
+    type: http
+    options:
+      url: >-
+        {{ config.services.docreader.url }}/api/v2/transaction/{{ TRANSACTION_ID
+        }}/process?useCache=true
+      method: post
+      headers: null
+      successCodes:
+        - 200
+      body: |
+        {
+          "processParam": {
+              "scenario": "FullProcess",
+              "useFaceApi": true,
+              "faceApi": {
+                  "serviceTimeout": 10000,
+                  "url": "{{ config.services.faceapi.url }}"
+              },
+              "log": true,
+              "authParams": {
+                  "livenessParams": {
+                      "checkED": false
+                }
+            }
+          }
+        }
+      response: {}
+    retry: {}
+  - id: GET_DOCREADER_RESULTS
+    name: GET_DOCREADER_RESULTS
+    type: http
+    fileId: doc_reader_results
+    transformers:
+      - id: GET_DOC_READER_RESULTS
+    options:
+      url: >-
+        {{ config.services.docreader.url }}/api/v2/transaction/{{ TRANSACTION_ID
+        }}/results?withImages=true
+      method: get
+      headers: null
+      successCodes:
+        - 200
+      body: null
+      response: {}
+  - id: LIVENESS_STATUS
+    name: LIVENESS_STATUS
+    type: http
+    fileId: liveness_status
+    transformers:
+      - id: LIVENESS_STATUS_TRANSFORMER
+    options:
+      url: >-
+        {{ config.services.faceapi.url }}/api/v2/liveness?transactionId={{
+        LIVENESS_TRANSACTION_ID }}&logRequest=false
+      method: get
+      headers: null
+      successCodes:
+        - 200
+      body: null
+      response: {}
+      timeout: 20
+  - id: GET_LIVENESS_PORTRAIT
+    name: LIVENESS_PORTRAIT
+    type: http
+    transformers:
+      - id: LIVENESS_PORTRAIT_TRANSFORMER
+    options:
+      url: >-
+        {{ config.services.faceapi.url
+        }}/api/v2/liveness/portrait?transactionId={{ LIVENESS_TRANSACTION_ID
+        }}&logRequest=false
+      method: get
+      headers: null
+      successCodes:
+        - 200
+        - 404
+      body: null
+      response: {}
+      timeout: 20
+  - id: GET_LIVENESS_VIDEO
+    name: LIVENESS_VIDEO
+    type: http
+    transformers:
+      - id: LIVENESS_VIDEO_TRANSFORMER
+    options:
+      url: >-
+        {{ config.services.faceapi.url }}/api/v2/liveness/video?transactionId={{
+        LIVENESS_TRANSACTION_ID }}&logRequest=false
+      method: get
+      headers: null
+      successCodes:
+        - 200
+        - 404
+      body: null
+      response: {}
+      timeout: 20
+  - id: GET_DOC_VIDEO
+    name: GET_DOC_VIDEO
+    type: http
+    transformers:
+      - id: DOC_VIDEO_TRANSFORMER
+    options:
+      url: >-
+        {{ config.services.docreader.url }}/api/v2/transaction/{{ TRANSACTION_ID
+        }}/file?name=in/video.mp4&logRequest=false
+      method: get
+      headers: null
+      successCodes:
+        - 200
+        - 404
+      body: null
+      response: {}
+      timeout: 20
+files:
+  - id: match_doc_and_liveness
+    type: REGULA_FACE_MATCH
+    contentType: application/json
+  - id: liveness_status
+    type: UNKNOWN
+    contentType: application/json
+  - id: is_continue_file
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "continue": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "continue"
+        ]
+      }
+  - id: is_continue_or_skip_file
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "continue": {
+            "type": "boolean"
+          },
+          "skip": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "continue",
+          "skip"
+        ]
+      }
+  - id: prepare_document
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "continue": {
+            "type": "boolean"
+          },
+          "has_nfc": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "continue",
+          "has_nfc"
+        ]
+      }
+  - id: doc_reader_results
+    type: REGULA_DOC_READER
+    contentType: application/json
+  - id: doc_reader
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "cancel": {
+            "type": "boolean"
+          },
+          "has_nfc": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "transactionId",
+          "cancel",
+          "has_nfc"
+        ]
+      }
+  - id: liveness
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "cancel": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "transactionId",
+          "cancel"
+        ]
+      }
+  - id: scan_rfid
+    type: UNKNOWN
+    contentType: application/json
+    jsonSchema: |
+      {
+        "$schema": "http://json-schema.org/draft-04/schema#",
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string"
+          },
+          "cancel": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "transactionId",
+          "cancel"
+        ]
+      }
+view:
+  title:
+    propertyIds:
+      - FULL_NAME
+  photo:
+    propertyIds:
+      - DOC_PHOTO
+  fields:
+    - propertyId: DATE_OF_BIRTH
+      name: Date of Birth
+    - propertyId: NATIONALITY
+      name: Nationality
+    - propertyId: DOCUMENT_NUMBER
+      name: Document number
+normalizers:
+  - id: document
+    name: Document status
+    type: DOCUMENT
+    rules:
+      - id: valid_document
+        decision: true
+      - id: valid_document_type
+        decision: true
+      - id: valid_age
+        decision: true
+    identifier:
+      property: TRANSACTION_ID
+    group: Documents
+    options:
+      documentFile:
+        actionId: GET_DOCREADER_RESULTS
+      videoFile:
+        property: DOC_VIDEO
+  - id: liveness
+    name: Liveness
+    type: LIVENESS
+    rules:
+      - id: compliant_liveness_status
+        decision: true
+    group: Biometrics
+    options:
+      livenessPortrait:
+        property: LIVENESS_PORTRAIT
+      livenessVideo:
+        property: LIVENESS_VIDEO
+  - id: face_match
+    name: Selfie match
+    type: FACE_MATCH
+    rules:
+      - id: valid_similarity
+        decision: true
+    group: Biometrics
+    options:
+      results:
+        - name: Selfie
+          similarity: null
+          file:
+            actionId: GET_LIVENESS_PORTRAIT
+        - name: Passport
+          similarity:
+            property: LIVENESS_DOC_SIMILARITY
+          file:
+            property: DOC_PHOTO

@@ -1,0 +1,48 @@
+services:
+  locust:
+    image: locustio/locust:latest
+    container_name: locust
+    restart: unless-stopped
+    ports:
+      - "8089:8089"
+    networks:
+      - idv-network
+    volumes:
+      - ./locust-test/:/mnt/locust
+    env_file:
+      - ./locust-environment/.env
+    command: >
+      -f /mnt/locust/locustfile.py
+      ${SCENARIO}
+      -H ${IDV_API_URL}
+      -u ${NUMBER_LOCUST_USERS}
+      -r 1
+      --web-host 0.0.0.0
+      --loglevel INFO
+      --autostart
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8089/', timeout=3)\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  locust-metrics-exporter:
+    image: containersol/locust_exporter:latest
+    container_name: locust-metrics-exporter
+    restart: unless-stopped
+    platform: "linux/amd64"
+    ports:
+      - "9646:9646"
+    networks:
+      - idv-network
+    environment:
+      - LOCUST_EXPORTER_URI=http://locust:8089
+    depends_on:
+      locust:
+        condition: service_healthy
+
+networks:
+  idv-network:
+    external: true
+    name: idv_idv-network
