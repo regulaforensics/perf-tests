@@ -1,0 +1,419 @@
+- key: "GENERAL_KYC_VERIFY_IDENTITY"
+  code: "en-us"
+  value: "Verify your identity"
+
+- key: "GENERAL_KYC_SCAN_ID"
+  code: "en-us"
+  value: "Scan your ID"
+
+- key: "GENERAL_KYC_SCAN_ID_DESC"
+  code: "en-us"
+  value: "Place the identity document within the frame, and it will be automatically detected, cropped, and processed."
+
+- key: "GENERAL_KYC_READ_RFID"
+  code: "en-us"
+  value: "Read RFID chip"
+
+- key: "GENERAL_KYC_READ_RFID_DESC"
+  code: "en-us"
+  value: "Place your phone on the document, wait for a vibration signal, and then hold steady until processing is done."
+
+- key: "GENERAL_KYC_TAKE_SELFIE"
+  code: "en-us"
+  value: "Take a selfie"
+
+- key: "GENERAL_KYC_TAKE_SELFIE_DESC"
+  code: "en-us"
+  value: "Position yourself within the frame, follow the instructions, and the selfie will be taken automatically."
+
+- key: "GENERAL_KYC_START_VERIFICATION"
+  code: "en-us"
+  value: "Start verification"
+
+- key: "GENERAL_KYC_CONTINUE"
+  code: "en-us"
+  value: "Continue"
+
+- key: "GENERAL_KYC_SCAN_ID_EXTRA_DESC"
+  code: "en-us"
+  value: "Place the identity document within the frame, and it will be automatically detected, cropped, and processed.\n\nYou can use any valid passport or ID card."
+
+- key: "GENERAL_KYC_SKIP"
+  code: "en-us"
+  value: "Skip"
+
+- key: "GENERAL_KYC_VERIFICATION_CANCELLED"
+  code: "en-us"
+  value: "Verification cancelled"
+
+- key: "GENERAL_KYC_VERIFICATION_WAITED"
+  code: "en-us"
+  value: "Operator confirmation required, please wait for session to continue"
+
+- key: "GENERAL_KYC_CLOSE"
+  code: "en-us"
+  value: "Close"
+
+- key: "GENERAL_KYC_DATA_SUBMITTED"
+  code: "en-us"
+  value: "Your data has been submitted for verification. Thank you!"
+
+- key: "GENERAL_KYC_VERIFICATION_FAILED"
+  code: "en-us"
+  value: "Verification failed. Please try again"
+
+- key: "GENERAL_KYC_ERROR_READING_ID"
+  code: "en-us"
+  value: "Something went wrong while reading your ID"
+
+- key: "GENERAL_KYC_CLOSE_VERIFICATION"
+  code: "en-us"
+  value: "Close verification"
+
+- key: "GENERAL_KYC_ERROR_READING_RFID"
+  code: "en-us"
+  value: "Something went wrong while reading RFID"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "en-us"
+  value: "Try again"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "en-us"
+  value: "Skip RFID Verification"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "ru-ru"
+  value: "Пропустить проверку RFID"
+
+- key: "GENERAL_KYC_VERIFY_IDENTITY"
+  code: "ru-ru"
+  value: "Подтвердите свою личность"
+
+- key: "GENERAL_KYC_SCAN_ID"
+  code: "ru-ru"
+  value: "Отсканируйте ваш документ"
+
+- key: "GENERAL_KYC_SCAN_ID_DESC"
+  code: "ru-ru"
+  value: "Поместите документ в рамку, он будет автоматически распознан, обрезан и обработан."
+
+- key: "GENERAL_KYC_READ_RFID"
+  code: "ru-ru"
+  value: "Считайте RFID-чип"
+
+- key: "GENERAL_KYC_READ_RFID_DESC"
+  code: "ru-ru"
+  value: "Приложите телефон к документу, дождитесь вибрации и держите до окончания обработки."
+
+- key: "GENERAL_KYC_TAKE_SELFIE"
+  code: "ru-ru"
+  value: "Сделайте селфи"
+
+- key: "GENERAL_KYC_CONTINUE"
+  code: "ru-ru"
+  value: "Продолжить"
+
+- key: "GENERAL_KYC_TAKE_SELFIE_DESC"
+  code: "ru-ru"
+  value: "Разместите себя в рамке, следуйте инструкциям – селфи будет сделано автоматически."
+
+- key: "GENERAL_KYC_START_VERIFICATION"
+  code: "ru-ru"
+  value: "Начать проверку"
+
+- key: "GENERAL_KYC_SCAN_ID_EXTRA_DESC"
+  code: "ru-ru"
+  value: "Поместите документ в рамку — он будет автоматически распознан, обрезан и обработан.\n\nВы можете использовать любой действительный паспорт или удостоверение личности."
+
+- key: "GENERAL_KYC_SKIP"
+  code: "ru-ru"
+  value: "Пропустить"
+
+- key: "GENERAL_KYC_VERIFICATION_CANCELLED"
+  code: "ru-ru"
+  value: "Проверка отменена"
+
+- key: "GENERAL_KYC_VERIFICATION_WAITED"
+  code: "ru-ru"
+  value: "Необходимо подтверждение оператора, ожидайте продолжения сессии"
+
+- key: "GENERAL_KYC_CLOSE"
+  code: "ru-ru"
+  value: "Закрыть"
+
+- key: "GENERAL_KYC_DATA_SUBMITTED"
+  code: "ru-ru"
+  value: "Ваши данные отправлены на проверку. Спасибо!"
+
+- key: "GENERAL_KYC_VERIFICATION_FAILED"
+  code: "ru-ru"
+  value: "Проверка не удалась. Пожалуйста, попробуйте снова"
+
+- key: "GENERAL_KYC_ERROR_READING_ID"
+  code: "ru-ru"
+  value: "Что-то пошло не так при чтении вашего документа"
+
+- key: "GENERAL_KYC_CLOSE_VERIFICATION"
+  code: "ru-ru"
+  value: "Закрыть проверку"
+
+- key: "GENERAL_KYC_ERROR_READING_RFID"
+  code: "ru-ru"
+  value: "Что-то пошло не так при чтении RFID"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "ru-ru"
+  value: "Попробовать снова"
+
+- key: "GENERAL_KYC_VERIFY_IDENTITY"
+  code: "es-cl"
+  value: "Verifica tu identidad"
+
+- key: "GENERAL_KYC_SCAN_ID"
+  code: "es-cl"
+  value: "Escanee su ID"
+
+- key: "GENERAL_KYC_SCAN_ID_DESC"
+  code: "es-cl"
+  value: "Ubica tu documento de identidad en el recuadro, será automáticamente detectado, recortado y procesado."
+
+- key: "GENERAL_KYC_READ_RFID"
+  code: "es-cl"
+  value: "Lectura de chip RFID"
+
+- key: "GENERAL_KYC_READ_RFID_DESC"
+  code: "es-cl"
+  value: "Coloca tu teléfono sobre el documento, espera la señal de vibración y mantenlo quieto hasta que se complete el procesamiento."
+
+- key: "GENERAL_KYC_TAKE_SELFIE"
+  code: "es-cl"
+  value: "Tómate una selfie"
+
+- key: "GENERAL_KYC_TAKE_SELFIE_DESC"
+  code: "es-cl"
+  value: "Posiciónate dentro del marco, sigue las instrucciones y la selfie se tomará automáticamente."
+
+- key: "GENERAL_KYC_START_VERIFICATION"
+  code: "es-cl"
+  value: "Iniciar verificación"
+
+- key: "GENERAL_KYC_CONTINUE"
+  code: "es-cl"
+  value: "Continuar"
+
+- key: "GENERAL_KYC_SCAN_ID_EXTRA_DESC"
+  code: "es-cl"
+  value: "Coloca el documento de identidad dentro del marco; será detectado, recortado y procesado automáticamente.\n\nPuedes usar cualquier pasaporte o tarjeta de identificación válida."
+
+- key: "GENERAL_KYC_SKIP"
+  code: "es-cl"
+  value: "Omitir"
+
+- key: "GENERAL_KYC_VERIFICATION_CANCELLED"
+  code: "es-cl"
+  value: "Verificación cancelada"
+
+- key: "GENERAL_KYC_VERIFICATION_WAITED"
+  code: "es-cl"
+  value: "Se requiere confirmación del operador, espere a que la sesión continúe"
+
+- key: "GENERAL_KYC_CLOSE"
+  code: "es-cl"
+  value: "Cerrar"
+
+- key: "GENERAL_KYC_DATA_SUBMITTED"
+  code: "es-cl"
+  value: "Tus datos han sido enviados para verificación. ¡Gracias!"
+
+- key: "GENERAL_KYC_VERIFICATION_FAILED"
+  code: "es-cl"
+  value: "Verificación fallida. Por favor, inténtelo de nuevo"
+
+- key: "GENERAL_KYC_ERROR_READING_ID"
+  code: "es-cl"
+  value: "Algo salió mal al leer tu documento de identidad"
+
+- key: "GENERAL_KYC_CLOSE_VERIFICATION"
+  code: "es-cl"
+  value: "Cerrar verificación"
+
+- key: "GENERAL_KYC_ERROR_READING_RFID"
+  code: "es-cl"
+  value: "Algo salió mal al leer el RFID"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "es-cl"
+  value: "Inténtalo de nuevo"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "es-cl"
+  value: "Omitir verificación de RFID"
+
+- key: "GENERAL_KYC_VERIFY_IDENTITY"
+  code: "pt-br"
+  value: "Verifique sua identidade"
+
+- key: "GENERAL_KYC_SCAN_ID"
+  code: "pt-br"
+  value: "Escaneie seu documento de identidade"
+
+- key: "GENERAL_KYC_SCAN_ID_DESC"
+  code: "pt-br"
+  value: "Coloque o documento de identidade dentro da moldura. Ele será detectado, recortado e processado automaticamente."
+
+- key: "GENERAL_KYC_READ_RFID"
+  code: "pt-br"
+  value: "Leia o chip RFID"
+
+- key: "GENERAL_KYC_READ_RFID_DESC"
+  code: "pt-br"
+  value: "Coloque o seu celular sobre o documento, aguarde o sinal de vibração e mantenha-o parado até que o processamento seja concluído."
+
+- key: "GENERAL_KYC_TAKE_SELFIE"
+  code: "pt-br"
+  value: "Tire uma selfie"
+
+- key: "GENERAL_KYC_TAKE_SELFIE_DESC"
+  code: "pt-br"
+  value: "Posicione-se dentro da moldura, siga as instruções e a selfie será tirada automaticamente."
+
+- key: "GENERAL_KYC_START_VERIFICATION"
+  code: "pt-br"
+  value: "Iniciar verificação"
+
+- key: "GENERAL_KYC_CONTINUE"
+  code: "pt-br"
+  value: "Continuar"
+
+- key: "GENERAL_KYC_SCAN_ID_EXTRA_DESC"
+  code: "pt-br"
+  value: "Coloque o documento de identidade dentro da moldura; ele será detectado, recortado e processado automaticamente.\n\nVocê pode usar qualquer passaporte ou carteira de identidade válida."
+
+- key: "GENERAL_KYC_SKIP"
+  code: "pt-br"
+  value: "Pular"
+
+- key: "GENERAL_KYC_VERIFICATION_CANCELLED"
+  code: "pt-br"
+  value: "Verificação cancelada"
+
+- key: "GENERAL_KYC_CLOSE"
+  code: "pt-br"
+  value: "Fechar"
+
+- key: "GENERAL_KYC_DATA_SUBMITTED"
+  code: "pt-br"
+  value: "Seus dados foram enviados para verificação. Obrigado!"
+
+- key: "GENERAL_KYC_VERIFICATION_FAILED"
+  code: "pt-br"
+  value: "Verificação falhou. Por favor, tente novamente."
+
+- key: "GENERAL_KYC_ERROR_READING_ID"
+  code: "pt-br"
+  value: "Algo deu errado ao ler seu documento de identidade."
+
+- key: "GENERAL_KYC_CLOSE_VERIFICATION"
+  code: "pt-br"
+  value: "Fechar verificação"
+
+- key: "GENERAL_KYC_ERROR_READING_RFID"
+  code: "pt-br"
+  value: "Algo deu errado ao ler o RFID"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "pt-br"
+  value: "Tente novamente"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "pt-br"
+  value: "Pular verificação de RFID"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "pt-br"
+  value: "Tente novamente"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "pt-br"
+  value: "Pular verificação de RFID"
+
+- key: "GENERAL_KYC_VERIFY_IDENTITY"
+  code: "ar-bh"
+  value: "تحقق من هويتك"
+
+- key: "GENERAL_KYC_SCAN_ID"
+  code: "ar-bh"
+  value: "امسح بطاقة الهوية"
+
+- key: "GENERAL_KYC_SCAN_ID_DESC"
+  code: "ar-bh"
+  value: "ضع بطاقة الهوية داخل الإطار، وسيتم تحديدها وقصها ومعالجتها تلقائيًا"
+
+- key: "GENERAL_KYC_READ_RFID"
+  code: "ar-bh"
+  value: "RFID قراءة شريحة"
+
+- key: "GENERAL_KYC_READ_RFID_DESC"
+  code: "ar-bh"
+  value: "ضع هاتفك على الوثيقة، انتظر إشارة الاهتزاز، ثم ثبت الهاتف حتى تكتمل عملية المعالجة"
+
+- key: "GENERAL_KYC_TAKE_SELFIE"
+  code: "ar-bh"
+  value: "التقط صورة لنفسك"
+
+- key: "GENERAL_KYC_TAKE_SELFIE_DESC"
+  code: "ar-bh"
+  value: "ضع نفسك داخل الإطار، اتبع التعليمات، وسيتم التقاط الصورة تلقائيًا"
+
+- key: "GENERAL_KYC_START_VERIFICATION"
+  code: "ar-bh"
+  value: "بدء التحقق"
+
+- key: "GENERAL_KYC_CONTINUE"
+  code: "ar-bh"
+  value: "تابع"
+
+- key: "GENERAL_KYC_SCAN_ID_EXTRA_DESC"
+  code: "ar-bh"
+  value: "ضع وثيقة الهوية داخل الإطار، وسيتم تحديدها وقصها ومعالجتها تلقائيًا./n/n يمكنك استخدام جواز السفر أو بطاقة هوية سارية المفعول"
+
+- key: "GENERAL_KYC_SKIP"
+  code: "ar-bh"
+  value: "تخطي"
+
+- key: "GENERAL_KYC_VERIFICATION_CANCELLED"
+  code: "ar-bh"
+  value: "تم إلغاء التحقق"
+
+- key: "GENERAL_KYC_CLOSE"
+  code: "ar-bh"
+  value: "إغلاق"
+
+- key: "GENERAL_KYC_DATA_SUBMITTED"
+  code: "ar-bh"
+  value: "!تم إرسال بياناتك للتحقق. شكرًا لك"
+
+- key: "GENERAL_KYC_VERIFICATION_FAILED"
+  code: "ar-bh"
+  value: "فشل التحقق. يرجى المحاولة مرة أخرى"
+
+- key: "GENERAL_KYC_ERROR_READING_ID"
+  code: "ar-bh"
+  value: "حدث خطأ أثناء قراءة بطاقة الهوية الخاصة بك."
+
+- key: "GENERAL_KYC_CLOSE_VERIFICATION"
+  code: "ar-bh"
+  value: "إغلاق التحقق"
+
+- key: "GENERAL_KYC_ERROR_READING_RFID"
+  code: "ar-bh"
+  value: "RFID حدث خطأ أثناء قراءة شريحة"
+
+- key: "GENERAL_KYC_TRY_AGAIN"
+  code: "ar-bh"
+  value: "حاول مرة اخرى"
+
+- key: "GENERAL_KYC_SKIP_RFID_VERIFICATION"
+  code: "ar-bh"
+  value: "RFID تخطى التحقق عبر"

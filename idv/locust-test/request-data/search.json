@@ -1,0 +1,23 @@
+{
+    "filter": {
+        "op": "$and",
+        "groups": [
+            {
+                "op": "$and",
+                "conditions": [
+                    {
+                        "field": "workflow.id",
+                        "op": "$in",
+                        "value": [
+                            "edda0192-b890-11ef-a348-17da751a6a22"
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    "columns": [],
+    "sort": [],
+    "groupIds": []
+}
+

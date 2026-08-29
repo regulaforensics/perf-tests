@@ -2,3 +2,10 @@ faceapi/environment/regula.license
 __pycache__
 **/.idea
 **/volumes
+
+
+/idv/environment/data/assets_data/
+/idv/environment/data/person_data/
+/idv/environment/data/user_data/
+/idv/environment/data/user_files/
+/idv/environment/regula.license

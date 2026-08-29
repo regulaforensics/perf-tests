@@ -1,0 +1,84 @@
+sdk:
+  compare:
+    limitPerImageTypes: 2
+  logging:
+    level: INFO
+service:
+  webServer:
+    port: 41101
+    workers: 1
+    timeout: 60
+
+    demoApp:
+      enabled: false
+
+    cors:
+      origins: "*"
+      headers: "Content-Type"
+      methods: "POST,PUT,GET,DELETE,PATCH,HEAD"
+
+    ssl:
+      enabled: false
+
+    logging:
+      level: INFO
+      formatter: text
+
+      access:
+        console: true
+        path: logs/faceapi-access.log
+
+      app:
+        console: true
+        path: logs/app/facesdk-reader-app.log
+
+    metrics:
+      enabled: true
+      path: metrics
+
+  storage:
+      type: fs
+
+  database:
+    connectionString: sqlite:///regula.face.db
+
+  liveness:
+    mode: development
+    exposeData:
+      portrait: true
+      video: true
+    enabled: true
+    sessions:
+      location:
+        bucket: faceapi
+        prefix: liveness
+
+  search:
+    enabled: true
+    persons:
+      location:
+        bucket: faceapi-persons
+        container: faceapi-persons
+        folder: tmp/faceapi-persons
+    results:
+      audit: true
+      location:
+        bucket: faceapi-search
+        container: faceapi-search
+        folder: faceapi-search
+    threshold: 1.0
+    vectorDatabase:
+      opensearch:
+        awsAuth:
+          accessKey: null
+          enabled: false
+          region: null
+          secretKey: null
+        dimension: 512
+        host: opensearch
+        password: t3stP@ss!Pwd#2025
+        port: '9200'
+        useSsl: false
+        username: admin
+        verifyCerts: false
+      type: opensearch

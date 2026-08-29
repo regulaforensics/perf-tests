@@ -1,0 +1,320 @@
+x-idv-volumes: &idv-volumes
+  - ./environment/regula.license:/app/extBin/unix/regula.license
+  - ./environment/config.yaml:/app/config.yaml:ro
+
+
+services:
+  faceapi:
+    container_name: faceapi
+    platform: "linux/amd64"
+    image: regulaforensics/face-api:${FACEAPI_TAG:-latest}
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: ${GPU_DRIVER:-nvidia}
+    #           count: ${GPU_COUNT:-0}
+    #           capabilities: [gpu]
+    networks:
+      - idv-network
+    volumes:
+      - ./environment/regula.license:/app/extBin/unix/regula.license
+      - ./environment/config/faceapi/config.yaml:/app/config.yaml
+    healthcheck:
+      test: curl -f http://127.0.0.1:41101/api/ping
+      interval: 60s
+      start_period: 60s
+      timeout: 30s
+      retries: 5
+    ports:
+      - "41101:41101"
+    depends_on:
+      opensearch:
+        condition: service_healthy
+
+  docreader:
+    container_name: docreader
+    platform: "linux/amd64"
+    image: regulaforensics/docreader:${DOCREADER_TAG:-latest}
+    networks:
+      - idv-network
+    volumes:
+      - ./environment/regula.license:/app/extBin/unix/regula.license
+      - ./environment/config/docreader/config.yaml:/app/config.yaml
+    healthcheck:
+      test: curl -f http://127.0.0.1:8080/api/ping
+      interval: 60s
+      start_period: 60s
+      timeout: 30s
+      retries: 5
+    ports:
+      - "8080:8080"
+
+  mongo:
+    container_name: mongo
+    image: mongo:${MONGODB_TAG:-8.0}
+    restart: always
+    ports:
+      - "27017:27017"
+    networks:
+      - idv-network
+    volumes:
+      - ./environment/volumes/mongo:/data/db
+    healthcheck:
+      test: ["CMD", "sh", "-c", "timeout 5 bash -c '</dev/tcp/localhost/27017'"]
+      interval: 10s
+      timeout: 8s
+      retries: 3
+      start_period: 20s
+
+  opensearch:
+    image: opensearchproject/opensearch:${OPENSEARCH_TAG:-3}
+    container_name: opensearch
+    platform: linux/amd64
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=t3stP@ss!Pwd#2025
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./environment/volumes/opensearch:/data
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    networks:
+      - idv-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:9200" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_TAG:-3.13-management}
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - ./environment/volumes/rabbitmq:/var/lib/rabbitmq
+    networks:
+      - idv-network
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "rabbitmq-diagnostics check_running && rabbitmq-diagnostics check_port_connectivity"
+      ]
+      interval: 10s
+      timeout: 15s
+      retries: 3
+      start_period: 40s
+
+  setup:
+    container_name: idv-setup
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes:
+        - ./environment/data/import:/app/import
+        - ./environment/config.yaml:/app/config.yaml:ro
+    depends_on:
+      faceapi:
+        condition: service_healthy
+      docreader:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    command: >
+      sh -c "
+        idv user delete --name regula-idv
+        echo \"Creating 'regula-idv' user\" &&
+        USER_INFO=$(idv user create -n regula-idv -p t3stP@ss -r admin -e regula-idv@regula.us);
+        echo \"User info: $$USER_INFO\";
+        USER_ID=$(echo \"$$USER_INFO\" | grep 'User ID:' | awk '{print $3}') &&
+        echo \"User ID is $$USER_ID\" &&
+        echo \"Creating General KYC view\" &&
+        idv view create --key general-kyc-key --namespace active-views-3 --title 'General KYC' --workflows edda0192-b890-11ef-a348-17da751a6a22 --fields status --properties FULL_NAME,DOCUMENT_NUMBER,AGE,RFID_STATUS,DATE_OF_BIRTH --userId $$USER_ID &&
+        echo \"General KYC view is created\" &&
+        idv session import -i /app/import &&
+        echo \"Sessions import finished\" &&
+        idv session reindex &&
+        echo \"Sessions reindex finished\"
+      "
+
+  minio:
+    container_name: minio
+    image: minio/minio:RELEASE.2025-09-07T16-13-09Z
+    command: server --console-address ":9001" /data
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    volumes:
+      - ./environment/volumes/minio:/data
+    networks:
+      - idv-network
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://127.0.0.1:9000/minio/health/live" ]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  minio-cfg:
+    container_name: miniocfg
+    image: minio/mc:RELEASE.2025-08-13T08-35-41Z
+    volumes:
+      - ./environment/data:/data
+    networks:
+      - idv-network
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      /usr/bin/mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      /usr/bin/mc mb myminio/idv-development-316487603304/;
+      /usr/bin/mc cp --recursive /data/workflows/ myminio/idv-development-316487603304/workflows;
+      /usr/bin/mc cp --recursive /data/localization/ myminio/idv-development-316487603304/localization;
+      sleep 60;
+      "
+
+  scheduler:
+    container_name: scheduler
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes: *idv-volumes
+    depends_on:
+      - setup
+      - minio
+    command: [ "idv", "scheduler", "start" ]
+
+  webserver:
+    container_name: webserver
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes: *idv-volumes
+    ports:
+      - "8000:8000"
+    depends_on:
+      - scheduler
+      - minio
+    command: ["idv", "webserver", "start"]
+
+  audit:
+    container_name: audit
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes: *idv-volumes
+    depends_on:
+      - scheduler
+      - minio
+    command: ["idv", "audit", "start"]
+
+  workflow:
+    container_name: workflow
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes: *idv-volumes
+    depends_on:
+      - scheduler
+      - minio
+    command: ["idv", "workflow", "start"]
+
+
+  indexer:
+    container_name: indexer
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
+    user: "1001"
+    image: regulaforensics/idv-coordinator:${IDV_TAG:-latest}
+    networks:
+      - idv-network
+    volumes: *idv-volumes
+    depends_on:
+      - scheduler
+      - minio
+    command: ["idv", "indexer", "start"]
+
+
+  prometheus:
+    container_name: prometheus
+    image: ubuntu/prometheus:latest
+    volumes:
+      - ./environment/prometheus/config.yml:/etc/prometheus/prometheus.yml
+      - ./environment/volumes/prometheus:/prometheus
+    networks:
+      - idv-network
+    ports:
+      - "9090:9090"
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    expose:
+      - 9100
+    networks:
+      - idv-network
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    volumes:
+      - ./environment/volumes/grafana:/var/lib/grafana
+      - ./environment/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "9091:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    depends_on:
+      - prometheus
+    networks:
+      - idv-network
+
+
+networks:
+  idv-network:
+    driver: bridge

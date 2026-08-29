@@ -1,0 +1,238 @@
+logging:
+  level: INFO
+  formatter: "%(asctime)s.%(msecs)03d - %(name)s - %(levelname)s - %(message)s"
+  console: true
+  file: false
+  path: logs
+  maxFileSize: 10048576
+  filesCount: 10
+
+mode: cluster
+fernetKey: "z82-gpAZjBkCmwE8GJjB-Lt5kJZi9ARAI2uXTRGtEfQ="
+identifier: "PQT"
+baseUrl: "http://localhost:8000"
+
+mobile:
+  apple:
+    bundleId: H6WR54S268.regula.DocumentReader
+    appId: "1001303920"
+  android:
+    bundleId: "com.regula.documentreader"
+    sha256:
+      - "60:92:AB:C1:E3:F1:53:5D:94:A8:CA:E5:40:85:8C:9B:3F:4A:30:99:44:88:08:1A:11:94:A0:71:6F:34:90:51"
+
+mongo:
+  url: mongodb://mongo:27017/idv
+  tempFiles:
+    ttl: 86400
+
+storage:
+  type: s3
+  s3:
+    endpoint: "http://minio:9000"
+    accessKey: "minioadmin"
+    accessSecret: "minioadmin"
+    region: master
+    secure: false
+  fs:
+    path: ""
+  az:
+    storageAccount: "devstoreaccount1"
+    connectionString: "DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://localhost:10000/devstoreaccount1;"
+  gcs:
+    anonymous: true
+    endpoint: "http://localhost:4443"
+    verifySsl: false
+  sessions:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "sessions"
+      folder: "user_data"
+
+  persons:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "persons"
+      folder: "person_data"
+
+  workflows:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "workflows"
+      folder: "config"
+
+  userFiles:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "files"
+      folder: "user_files"
+
+  tempFiles:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "tmp"
+      folder: "user_files"
+
+  locales:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "localization"
+      folder: "config"
+
+  assets:
+    location:
+      container: "idv-development-316487603304"
+      bucket: "idv-development-316487603304"
+      prefix: "assets"
+      folder: "assets_data"
+
+smtp:
+  enabled: false
+  host: ""
+  port: 587
+  username: ""
+  password: ""
+  tls: true
+
+faceSearch:
+  enabled: true
+  limit: 1000
+  threshold: 0.75
+  database:
+    type: opensearch
+    opensearch:
+      host: "localhost"
+      port: "9200"
+      useSsl: false
+      verifyCerts: false
+      username: admin
+      password: ""
+      dimension: 512
+      method: hnsw
+      awsAuth:
+        enabled: false
+        region: ""
+
+textSearch:
+  enabled: true
+  limit: 1000
+  database:
+    type: opensearch
+    opensearch:
+      host: "localhost"
+      port: "9200"
+      useSsl: false
+      verifyCerts: false
+      username: admin
+      password: ""
+      awsAuth:
+        enabled: false
+        region: ""
+
+services:
+  docreader:
+    enabled: true
+    prefix: "drapi"
+    url: "http://docreader:8080"
+
+  faceapi:
+    enabled: true
+    prefix: "faceapi"
+    url: "http://faceapi:41101"
+
+  api:
+    enabled: true
+    openapi: true
+    port: 8000
+    host: "0.0.0.0"
+    workers: 2
+    threads: auto
+    keepalive: 120
+    timeout: 30
+    maxBodySize: 64Mi
+    cors:
+      enabled: true
+      origins: "*"
+      methods: "POST,PUT,GET,DELETE,PATCH,HEAD"
+      headers: "Content-Type,X-Client-Key"
+      maxAge: 0
+
+  audit:
+    enabled: true
+    wsEnabled: true
+    user:
+      keepFor: "90d"
+    api:
+      keepFor: "90d"
+
+  indexer:
+    enabled: true
+    timeout: 60
+    maxBatchSize: 1000
+
+  scheduler:
+    enabled: true
+    jobs:
+      expireSessions:
+        cron: "* 0/10 * * * *"
+      reloadWorkflows:
+        cron: "*/15 * * * * *"
+      cleanSessions:
+        cron: "* 0/10 * * * *"
+        keepFor: "3365d"
+      expireDeviceLogs:
+        cron: "*/30 * * * *"
+        keepFor: "30d"
+      reloadLocales:
+        cron: "* 0/10 * * * *"
+      cronWorkflow:
+        cron: "* 0/10 * * * *"
+      tempFilesCleanup:
+        cron: "* */1 * * *"
+        keepFor: "1d"
+
+  workflow:
+    enabled: true
+    workers: auto
+
+  ip2location:
+    enabled: false
+    type: regula
+    regula:
+      url: https://lic.regulaforensics.com
+      timeout: 3
+
+  livekit:
+    enabled: false
+    url: http://localhost:7880
+    apiKey: devkey
+    apiSecret: secret
+
+
+messageBroker:
+  url: amqp://admin:admin@rabbitmq:5672/
+
+metrics:
+  statsd:
+    enabled: false
+    host: localhost
+    port: 9125
+    prefix: idv
+  database:
+    enabled: true
+  alerts:
+    enabled: true
+    source: prometheus
+    prometheus:
+      url: http://prometheus:9090
+      filter:
+        groups: [ "idv.rules" ]
+
+basicAuth:
+  enabled: True
